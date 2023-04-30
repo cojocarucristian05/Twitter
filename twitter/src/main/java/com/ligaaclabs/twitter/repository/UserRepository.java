@@ -1,5 +1,6 @@
 package com.ligaaclabs.twitter.repository;
 
+import com.ligaaclabs.twitter.model.Post;
 import com.ligaaclabs.twitter.model.User;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,7 @@ public interface UserRepository {
     boolean search(String query);
 
     List<User> getSearchUsers(String query);
+    User searchByUsername(String username);
+
+    void addPost(User user, Post post);
 }

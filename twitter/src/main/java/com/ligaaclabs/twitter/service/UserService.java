@@ -1,8 +1,7 @@
 package com.ligaaclabs.twitter.service;
 
+import com.ligaaclabs.twitter.model.Post;
 import com.ligaaclabs.twitter.model.User;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
@@ -19,4 +18,10 @@ public interface UserService {
     List<User> getSearchUsers(String query);
 
     boolean search(String query);
+
+     boolean follow(String usernameFollower, String usernameFollowed);
+
+    void addPost(User user, Post post);
+
+    User getByUsername(String username);
 }

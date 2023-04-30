@@ -1,10 +1,9 @@
 package com.ligaaclabs.twitter.service;
 
+import com.ligaaclabs.twitter.model.Post;
 import com.ligaaclabs.twitter.model.User;
 import com.ligaaclabs.twitter.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
-import java.security.SecureRandom;
 import java.util.List;
 
 @Service
@@ -37,5 +36,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean search(String query) {
         return userRepository.search(query);
+    }
+
+    @Override
+    public boolean follow(String usernameFollower, String usernameFollowed) {
+        User follower = userRepository.searchByUsername(usernameFollower);
+        User followed = userRepository.searchByUsername(usernameFollowed);
+        if (follower != null && followed != null && !follower.getFollowing().contains(usernameFollowed)) {
+            followed.getFollowers().add(usernameFollower);
+            follower.getFollowing().add(usernameFollowed);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void addPost(User user, Post post) {
+        userRepository.addPost(user, post);
+    }
+
+    @Override
+    public User getByUsername(String username) {
+        return userRepository.searchByUsername(username);
     }
 }
