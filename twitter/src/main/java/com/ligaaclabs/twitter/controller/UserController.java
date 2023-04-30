@@ -1,5 +1,6 @@
 package com.ligaaclabs.twitter.controller;
 
+import com.ligaaclabs.twitter.advice.exception.UserNotFoundException;
 import com.ligaaclabs.twitter.model.Post;
 import com.ligaaclabs.twitter.model.User;
 import com.ligaaclabs.twitter.service.PostService;
@@ -8,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -52,7 +56,7 @@ public class UserController {
         return ResponseEntity.badRequest().body("Follow denied!");
     }
 
-    @PostMapping("/add/{username}")
+    @PostMapping("/add_post/{username}")
     public ResponseEntity<?> addPost(@PathVariable String username, @RequestBody String content) {
         User user = userService.getByUsername(username);
         if(user != null) {
@@ -60,6 +64,37 @@ public class UserController {
             return ResponseEntity.ok("Post added!");
         }
         return ResponseEntity.badRequest().body("User not found!");
+    }
+
+    @GetMapping("/own/{username}")
+    public List<Post> getOwnPosts(@PathVariable String username, @RequestParam(required = false) LocalDateTime timestamp) {
+        User user = userService.getByUsername(username);
+        List<Post> posts;
+        if(user == null) {
+            throw new UserNotFoundException("User not found!");
+        }
+        if (timestamp != null) {
+            posts = postService.getOwnPostsByTimestamp(user, timestamp);
+        } else {
+            posts = postService.getOwnPosts(user);
+        }
+        return posts;
+    }
+
+    @GetMapping("/feed/{username}")
+    public List<Post> getFeed(@PathVariable String username) {
+        User user = userService.getByUsername(username);
+        if(user == null) {
+            throw new UserNotFoundException("User not found!");
+        }
+
+        List<String> following = user.getFollowing();
+        List<Post> feed = new ArrayList<>();
+        for (String followed : following) {
+            feed.addAll(postService.getOwnPosts(userService.getByUsername(followed)));
+        }
+        feed.sort(Comparator.comparing(Post::getDate).reversed());
+        return feed;
     }
 
 }

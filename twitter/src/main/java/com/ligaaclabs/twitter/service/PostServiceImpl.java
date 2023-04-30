@@ -6,6 +6,7 @@ import com.ligaaclabs.twitter.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,7 +20,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void addPost(User user, String content) {
-        Post post = new Post(content, LocalDate.now(), user.getUsername());
+        Post post = new Post(content, LocalDateTime.now(), user.getUsername());
         user.getPosts().add(post);
         postRepository.createPost(post);
     }
@@ -27,6 +28,16 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getAllPosts() {
         return postRepository.getAllPosts();
+    }
+
+    @Override
+    public List<Post> getOwnPostsByTimestamp(User user, LocalDateTime timestamps) {
+        return postRepository.getOwnPostsByTimestamp(user, timestamps);
+    }
+
+    @Override
+    public List<Post> getOwnPosts(User user) {
+        return postRepository.getOwnPosts(user);
     }
 
 }

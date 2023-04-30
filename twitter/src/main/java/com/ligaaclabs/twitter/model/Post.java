@@ -1,14 +1,17 @@
 package com.ligaaclabs.twitter.model;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Post {
 
     private String content;
-    private LocalDate date;
+    private LocalDateTime date;
     private String username;
 
-    public Post(String content, LocalDate date, String username) {
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public Post(String content, LocalDateTime date, String username) {
         this.content = content;
         this.date = date;
         this.username = username;
