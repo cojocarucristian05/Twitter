@@ -16,4 +16,6 @@ public interface PostRepository {
 
     List<Post> getOwnPosts(User user);
 
+    Post getPostById(Integer id);
+
 }

@@ -19,8 +19,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void addPost(User user, String content) {
-        Post post = new Post(content, LocalDateTime.now(), user.getUsername());
+    public void addPost(User user, Integer id, String content) {
+        Post post = new Post(id, content, LocalDateTime.now(), user.getUsername());
         user.getPosts().add(post);
         postRepository.createPost(post);
     }
@@ -38,6 +38,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getOwnPosts(User user) {
         return postRepository.getOwnPosts(user);
+    }
+
+    @Override
+    public Post getPostById(Integer id) {
+        return postRepository.getPostById(id);
     }
 
 }

@@ -16,8 +16,8 @@ public class User {
     private List<String> followers;
     private List<String> following;
 
-    List<Post> posts;
-
+    private List<Post> posts;
+    private List<Like> likes;
     public List<Post> getPosts() {
         return posts;
     }
@@ -31,6 +31,7 @@ public class User {
         followers = new ArrayList<>();
         following = new ArrayList<>();
         posts = new ArrayList<>();
+        likes = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -87,5 +88,9 @@ public class User {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
     }
 }

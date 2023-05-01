@@ -1,5 +1,6 @@
 package com.ligaaclabs.twitter.repository;
 
+import com.ligaaclabs.twitter.advice.exception.PostNotFoundException;
 import com.ligaaclabs.twitter.model.Post;
 import com.ligaaclabs.twitter.model.User;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,7 @@ public class PostRepositoryImpl implements PostRepository{
 
     @Override
     public void createPost(Post post) {
+        post.setId(index);
         POSTS.put(index, post);
         index++;
     }
@@ -42,6 +44,16 @@ public class PostRepositoryImpl implements PostRepository{
                 .filter(post -> post.getUser().equals(user.getUsername()))
                 .sorted(Comparator.comparing(Post::getDate).reversed())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Post getPostById(Integer id) {
+        Post post = POSTS.get(id);
+        if(Objects.isNull(post)) {
+            throw new PostNotFoundException("Post not found!");
+        }
+
+        return post;
     }
 
 

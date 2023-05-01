@@ -1,8 +1,11 @@
 package com.ligaaclabs.twitter.controller;
 
+import com.ligaaclabs.twitter.advice.exception.PostNotFoundException;
 import com.ligaaclabs.twitter.advice.exception.UserNotFoundException;
+import com.ligaaclabs.twitter.model.Like;
 import com.ligaaclabs.twitter.model.Post;
 import com.ligaaclabs.twitter.model.User;
+import com.ligaaclabs.twitter.service.LikeService;
 import com.ligaaclabs.twitter.service.PostService;
 import com.ligaaclabs.twitter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "api/v1/user")
@@ -24,9 +28,13 @@ public class UserController {
     @Autowired
     private final PostService postService;
 
-    public UserController(UserService userService, PostService postService) {
+    @Autowired
+    private final LikeService likeService;
+
+    public UserController(UserService userService, PostService postService, LikeService likeService) {
         this.userService = userService;
         this.postService = postService;
+        this.likeService = likeService;
     }
 
     @PostMapping("/register")
@@ -60,7 +68,7 @@ public class UserController {
     public ResponseEntity<?> addPost(@PathVariable String username, @RequestBody String content) {
         User user = userService.getByUsername(username);
         if(user != null) {
-            postService.addPost(user, content);
+            postService.addPost(user, 0, content);
             return ResponseEntity.ok("Post added!");
         }
         return ResponseEntity.badRequest().body("User not found!");
@@ -95,6 +103,38 @@ public class UserController {
         }
         feed.sort(Comparator.comparing(Post::getDate).reversed());
         return feed;
+    }
+
+
+    @PostMapping(value = "/like_post/{id}")
+    public ResponseEntity<?> likePost(@PathVariable Integer id, @RequestParam String username) {
+        Post post = postService.getPostById(id);
+        if(Objects.isNull(post)) {
+            throw new PostNotFoundException("Post not found!");
+        }
+
+        User user = userService.getByUsername(username);
+        if(Objects.isNull(user)){
+            throw new UserNotFoundException("User not found!");
+        }
+
+        Like like = new Like(post.getId(), user.getUsername());
+
+        likeService.createLike(like);
+        post.getLikes().add(like);
+        User user1 = getUserByPost(id);
+        user1.getLikes().add(like);
+        return ResponseEntity.ok("Like added!");
+    }
+
+    @GetMapping("/post/{id}")
+    public User getUserByPost(@PathVariable Integer id) {
+        Post post = postService.getPostById(id);
+        if(Objects.isNull(post)) {
+            throw new PostNotFoundException("Post not found!");
+        }
+
+        return userService.getByUsername(post.getUser());
     }
 
 }

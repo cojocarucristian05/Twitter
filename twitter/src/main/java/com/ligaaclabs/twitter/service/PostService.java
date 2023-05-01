@@ -8,12 +8,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface PostService {
-    void addPost(User user, String content);
+    void addPost(User user, Integer id, String content);
 
     List<Post> getAllPosts();
 
     List<Post> getOwnPostsByTimestamp(User user, LocalDateTime timestamps);
 
     List<Post> getOwnPosts(User user);
+
+    Post getPostById(Integer id);
 
 }
