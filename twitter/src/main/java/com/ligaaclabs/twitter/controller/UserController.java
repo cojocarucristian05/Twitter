@@ -4,9 +4,11 @@ import com.ligaaclabs.twitter.advice.exception.PostNotFoundException;
 import com.ligaaclabs.twitter.advice.exception.UserNotFoundException;
 import com.ligaaclabs.twitter.model.Like;
 import com.ligaaclabs.twitter.model.Post;
+import com.ligaaclabs.twitter.model.Reply;
 import com.ligaaclabs.twitter.model.User;
 import com.ligaaclabs.twitter.service.LikeService;
 import com.ligaaclabs.twitter.service.PostService;
+import com.ligaaclabs.twitter.service.ReplyService;
 import com.ligaaclabs.twitter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,10 +33,14 @@ public class UserController {
     @Autowired
     private final LikeService likeService;
 
-    public UserController(UserService userService, PostService postService, LikeService likeService) {
+    @Autowired
+    private final ReplyService replyService;
+
+    public UserController(UserService userService, PostService postService, LikeService likeService, ReplyService replyService) {
         this.userService = userService;
         this.postService = postService;
         this.likeService = likeService;
+        this.replyService = replyService;
     }
 
     @PostMapping("/register")
@@ -113,6 +119,12 @@ public class UserController {
             throw new PostNotFoundException("Post not found!");
         }
 
+        for(Like like : post.getLikes()) {
+            if(like.getUsername().equals(username)){
+                return ResponseEntity.badRequest().body("You already liked this post!");
+            }
+        }
+
         User user = userService.getByUsername(username);
         if(Objects.isNull(user)){
             throw new UserNotFoundException("User not found!");
@@ -122,8 +134,7 @@ public class UserController {
 
         likeService.createLike(like);
         post.getLikes().add(like);
-        User user1 = getUserByPost(id);
-        user1.getLikes().add(like);
+        user.getLikes().add(like);
         return ResponseEntity.ok("Like added!");
     }
 
@@ -137,4 +148,36 @@ public class UserController {
         return userService.getByUsername(post.getUser());
     }
 
+    @PostMapping("{username}/reply/{postId}")
+    public ResponseEntity<?> reply(@PathVariable String username,
+                                   @PathVariable Integer postId,
+                                   @RequestParam(required = false) Integer replyParentId,
+                                   @RequestBody Reply reply) {
+
+        Post post = postService.getPostById(postId);
+        if(Objects.isNull(post)) {
+            throw new PostNotFoundException("Post not found !");
+        }
+
+        User user = userService.getByUsername(username);
+        if(Objects.isNull(user)) {
+            throw new UserNotFoundException("User not found!");
+        }
+
+        reply.setUsername(username);
+
+        if(replyParentId != null) {
+            Reply parentReply = replyService.getReplyByParentId(replyParentId);
+            if (parentReply == null || parentReply.getParentPostId() != postId) {
+                return ResponseEntity.badRequest().body("Reply not found!");
+            }
+            reply.setParentReplyId(parentReply.getId());
+            parentReply.getReplies().add(reply.getContent());
+        } else {
+            reply.setParentPostId(postId);
+            post.getReplies().add(reply);
+        }
+        replyService.addReply(reply);
+        return ResponseEntity.ok("Reply added!");
+    }
 }

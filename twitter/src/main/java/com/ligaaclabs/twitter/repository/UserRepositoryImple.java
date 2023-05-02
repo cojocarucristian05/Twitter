@@ -2,7 +2,6 @@ package com.ligaaclabs.twitter.repository;
 
 import com.ligaaclabs.twitter.model.Post;
 import com.ligaaclabs.twitter.model.User;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;

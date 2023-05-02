@@ -11,6 +11,8 @@ public class Post {
 
     private List<Like> likes;
 
+    private List<Reply> replies;
+
     public LocalDateTime getDate() {
         return date;
     }
@@ -21,6 +23,7 @@ public class Post {
         this.date = date;
         this.username = username;
         likes = new ArrayList<>();
+        replies = new ArrayList<>();
     }
 
     public String getUser() {
@@ -56,5 +59,13 @@ public class Post {
 
     public void setLikes(List<Like> likes) {
         this.likes = likes;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public List<Reply> getReplies() {
+        return replies;
     }
 }

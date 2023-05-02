@@ -1,8 +1,5 @@
 package com.ligaaclabs.twitter.model;
 
-import lombok.ToString;
-
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
 
