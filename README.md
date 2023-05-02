@@ -2,6 +2,7 @@
 
 - Project specifications -
 Use cases 
+ 
  User 
 1. Register : allow users to register with an unique username, a first name and a last name, an e-mail and a password 
 2. Search : search for other users by username, firstname or lastname
