@@ -30,4 +30,7 @@ Use cases
 *Note: The bold use cases have priority and should be implemented in the order they appear in  this document  
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Entity Relationship Diagram
+
 ![image](https://user-images.githubusercontent.com/93082736/235606106-060f289f-2ce3-4dde-85da-74fe9aaf08b5.png)
