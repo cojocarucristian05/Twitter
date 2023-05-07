@@ -15,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "api/v1/user")
@@ -45,139 +42,132 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        if (userService.searchByUsername(user)) {
-            return ResponseEntity.badRequest().body("User already exists!");
-        }
-        userService.registerUser(user);
-        return ResponseEntity.ok("User registered successfully!");
+        return userService.registerUser(user);
     }
-
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+//
+//    @GetMapping("/users")
+//    public List<User> getAllUsers() {
+//        return userService.getAllUsers();
+//    }
+//
+//    @GetMapping("/search/{query}")
+//    public List<User> getSearchUsers(@PathVariable String query) {
+//        return userService.getSearchUsers(query);
+//    }
+//
+    @PostMapping("/{idFollower}/follow/{idFollowed}")
+    public ResponseEntity<?> follow(@PathVariable UUID idFollower, @PathVariable UUID idFollowed) {
+       return userService.follow(idFollower, idFollowed);
     }
-
-    @GetMapping("/search/{query}")
-    public List<User> getSearchUsers(@PathVariable String query) {
-        return userService.getSearchUsers(query);
-    }
-
-    @PostMapping("/{usernameFollower}/follow/{usernameFollowed}")
-    public ResponseEntity<?> follow(@PathVariable String usernameFollower, @PathVariable String usernameFollowed) {
-        if(userService.follow(usernameFollower, usernameFollowed)) {
-           return ResponseEntity.ok("Follow succeed!");
-        }
-        return ResponseEntity.badRequest().body("Follow denied!");
-    }
-
-    @PostMapping("/add_post/{username}")
-    public ResponseEntity<?> addPost(@PathVariable String username, @RequestBody String content) {
-        User user = userService.getByUsername(username);
-        if(user != null) {
-            postService.addPost(user, 0, content);
-            return ResponseEntity.ok("Post added!");
-        }
-        return ResponseEntity.badRequest().body("User not found!");
-    }
-
-    @GetMapping("/own/{username}")
-    public List<Post> getOwnPosts(@PathVariable String username, @RequestParam(required = false) LocalDateTime timestamp) {
-        User user = userService.getByUsername(username);
-        List<Post> posts;
-        if(user == null) {
-            throw new UserNotFoundException("User not found!");
-        }
-        if (timestamp != null) {
-            posts = postService.getOwnPostsByTimestamp(user, timestamp);
-        } else {
-            posts = postService.getOwnPosts(user);
-        }
-        return posts;
-    }
-
-    @GetMapping("/feed/{username}")
-    public List<Post> getFeed(@PathVariable String username) {
-        User user = userService.getByUsername(username);
-        if(user == null) {
-            throw new UserNotFoundException("User not found!");
-        }
-
-        List<String> following = user.getFollowing();
-        List<Post> feed = new ArrayList<>();
-        for (String followed : following) {
-            feed.addAll(postService.getOwnPosts(userService.getByUsername(followed)));
-        }
-        feed.sort(Comparator.comparing(Post::getDate).reversed());
-        return feed;
-    }
-
-
-    @PostMapping(value = "/like_post/{id}")
-    public ResponseEntity<?> likePost(@PathVariable Integer id, @RequestParam String username) {
-        Post post = postService.getPostById(id);
-        if(Objects.isNull(post)) {
-            throw new PostNotFoundException("Post not found!");
-        }
-
-        for(Like like : post.getLikes()) {
-            if(like.getUsername().equals(username)){
-                return ResponseEntity.badRequest().body("You already liked this post!");
-            }
-        }
-
-        User user = userService.getByUsername(username);
-        if(Objects.isNull(user)){
-            throw new UserNotFoundException("User not found!");
-        }
-
-        Like like = new Like(post.getId(), user.getUsername());
-
-        likeService.createLike(like);
-        post.getLikes().add(like);
-        user.getLikes().add(like);
-        return ResponseEntity.ok("Like added!");
-    }
-
-    @GetMapping("/post/{id}")
-    public User getUserByPost(@PathVariable Integer id) {
-        Post post = postService.getPostById(id);
-        if(Objects.isNull(post)) {
-            throw new PostNotFoundException("Post not found!");
-        }
-
-        return userService.getByUsername(post.getUser());
-    }
-
-    @PostMapping("{username}/reply/{postId}")
-    public ResponseEntity<?> reply(@PathVariable String username,
-                                   @PathVariable Integer postId,
-                                   @RequestParam(required = false) Integer replyParentId,
-                                   @RequestBody Reply reply) {
-
-        Post post = postService.getPostById(postId);
-        if(Objects.isNull(post)) {
-            throw new PostNotFoundException("Post not found !");
-        }
-
-        User user = userService.getByUsername(username);
-        if(Objects.isNull(user)) {
-            throw new UserNotFoundException("User not found!");
-        }
-
-        reply.setUsername(username);
-
-        if(replyParentId != null) {
-            Reply parentReply = replyService.getReplyByParentId(replyParentId);
-            if (parentReply == null || parentReply.getParentPostId() != postId) {
-                return ResponseEntity.badRequest().body("Reply not found!");
-            }
-            reply.setParentReplyId(parentReply.getId());
-            parentReply.getReplies().add(reply.getContent());
-        } else {
-            reply.setParentPostId(postId);
-            post.getReplies().add(reply);
-        }
-        replyService.addReply(reply);
-        return ResponseEntity.ok("Reply added!");
-    }
+//
+//    @PostMapping("/add_post/{username}")
+//    public ResponseEntity<?> addPost(@PathVariable String username, @RequestBody String content) {
+//        User user = userService.getByUsername(username);
+//        if(user != null) {
+//            postService.addPost(user, 0, content);
+//            return ResponseEntity.ok("Post added!");
+//        }
+//        return ResponseEntity.badRequest().body("User not found!");
+//    }
+//
+//    @GetMapping("/own/{username}")
+//    public List<Post> getOwnPosts(@PathVariable String username, @RequestParam(required = false) LocalDateTime timestamp) {
+//        User user = userService.getByUsername(username);
+//        List<Post> posts;
+//        if(user == null) {
+//            throw new UserNotFoundException("User not found!");
+//        }
+//        if (timestamp != null) {
+//            posts = postService.getOwnPostsByTimestamp(user, timestamp);
+//        } else {
+//            posts = postService.getOwnPosts(user);
+//        }
+//        return posts;
+//    }
+//
+//    @GetMapping("/feed/{username}")
+//    public List<Post> getFeed(@PathVariable String username) {
+//        User user = userService.getByUsername(username);
+//        if(user == null) {
+//            throw new UserNotFoundException("User not found!");
+//        }
+//
+//        List<String> following = user.getFollowing();
+//        List<Post> feed = new ArrayList<>();
+//        for (String followed : following) {
+//            feed.addAll(postService.getOwnPosts(userService.getByUsername(followed)));
+//        }
+//        feed.sort(Comparator.comparing(Post::getDate).reversed());
+//        return feed;
+//    }
+//
+//
+//    @PostMapping(value = "/like_post/{id}")
+//    public ResponseEntity<?> likePost(@PathVariable Integer id, @RequestParam String username) {
+//        Post post = postService.getPostById(id);
+//        if(Objects.isNull(post)) {
+//            throw new PostNotFoundException("Post not found!");
+//        }
+//
+//        for(Like like : post.getLikes()) {
+//            if(like.getUsername().equals(username)){
+//                return ResponseEntity.badRequest().body("You already liked this post!");
+//            }
+//        }
+//
+//        User user = userService.getByUsername(username);
+//        if(Objects.isNull(user)){
+//            throw new UserNotFoundException("User not found!");
+//        }
+//
+//        Like like = new Like(post.getId(), user.getUsername());
+//
+//        likeService.createLike(like);
+//        post.getLikes().add(like);
+//        user.getLikes().add(like);
+//        return ResponseEntity.ok("Like added!");
+//    }
+//
+//    @GetMapping("/post/{id}")
+//    public User getUserByPost(@PathVariable Integer id) {
+//        Post post = postService.getPostById(id);
+//        if(Objects.isNull(post)) {
+//            throw new PostNotFoundException("Post not found!");
+//        }
+//
+//        return userService.getByUsername(post.getUser());
+//    }
+//
+//    @PostMapping("{username}/reply/{postId}")
+//    public ResponseEntity<?> reply(@PathVariable String username,
+//                                   @PathVariable Integer postId,
+//                                   @RequestParam(required = false) Integer replyParentId,
+//                                   @RequestBody Reply reply) {
+//
+//        Post post = postService.getPostById(postId);
+//        if(Objects.isNull(post)) {
+//            throw new PostNotFoundException("Post not found !");
+//        }
+//
+//        User user = userService.getByUsername(username);
+//        if(Objects.isNull(user)) {
+//            throw new UserNotFoundException("User not found!");
+//        }
+//
+//        reply.setUsername(username);
+//
+//        if(replyParentId != null) {
+//            Reply parentReply = replyService.getReplyByParentId(replyParentId);
+//            if (parentReply == null || parentReply.getParentPostId() != postId) {
+//                return ResponseEntity.badRequest().body("Reply not found!");
+//            }
+//            reply.setParentReplyId(parentReply.getId());
+//            parentReply.getReplies().add(reply.getContent());
+//        } else {
+//            reply.setParentPostId(postId);
+//            post.getReplies().add(reply);
+//        }
+//        replyService.addReply(reply);
+//        return ResponseEntity.ok("Reply added!");
+//    }
 }

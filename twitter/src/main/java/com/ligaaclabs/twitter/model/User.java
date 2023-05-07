@@ -1,25 +1,61 @@
 package com.ligaaclabs.twitter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+import jdk.jfr.Enabled;
+import lombok.Data;
+import net.minidev.json.annotate.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Data
+@Entity
+@Table(name = "\"user\"")
+@JsonIgnoreProperties({"followers", "following"})
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
+
+    @Column(name = "username", nullable = false)
     private String username;
+
+    @Column(name = "firstname", nullable = false)
     private String firstname;
+
+    @Column(name = "lastname", nullable = false)
     private String lastname;
+
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "password", nullable = false)
+    @JsonIgnore
     private String password;
 
-    private List<String> followers;
-    private List<String> following;
+    @OneToMany
+    private List<User> followers;
 
-    private List<Post> posts;
-    private List<Like> likes;
-    public List<Post> getPosts() {
-        return posts;
-    }
+    @OneToMany
+    private List<User> following;
+//
+//    @OneToMany
+//    private List<Post> posts;
+//
+//    @OneToMany
+//    private List<Like> likes;
 
-    public User(String username, String firstname, String lastname, String email, String password) {
+    public User() { }
+//    public List<Post> getPosts() {
+//        return posts;
+//    }
+
+    public User(UUID userId, String username, String firstname, String lastname, String email, String password) {
+        this.userId = userId;
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -27,8 +63,8 @@ public class User {
         this.password = password;
         followers = new ArrayList<>();
         following = new ArrayList<>();
-        posts = new ArrayList<>();
-        likes = new ArrayList<>();
+//        posts = new ArrayList<>();
+//        likes = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -47,47 +83,19 @@ public class User {
         return email;
     }
 
-    public List<String> getFollowers() {
+    public List<User> getFollowers() {
         return followers;
     }
 
-    public List<String> getFollowing() {
+    public List<User> getFollowing() {
         return following;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("User{");
-        sb.append("username='").append(username).append('\'');
-        sb.append("firstname='").append(firstname).append('\'');
-        sb.append("lastname='").append(lastname).append('\'');
-        sb.append("email='").append(email).append('\'');
-        sb.append(", followers=[");
-        for (String follower : followers) {
-            sb.append(follower).append(", ");
-        }
-        if (!followers.isEmpty()) {
-            sb.setLength(sb.length() - 2);
-        }
-        sb.append("]");
-        sb.append(", following=[");
-        for (String followed : following) {
-            sb.append(followed).append(", ");
-        }
-        if (!following.isEmpty()) {
-            sb.setLength(sb.length() - 2);
-        }
-        sb.append("]");
-        sb.append("}");
-        return sb.toString();
-    }
+//    public void setPosts(List<Post> posts) {
+//        this.posts = posts;
+//    }
 
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
-
-    public List<Like> getLikes() {
-        return likes;
-    }
+//    public List<Like> getLikes() {
+//        return likes;
+//    }
 }

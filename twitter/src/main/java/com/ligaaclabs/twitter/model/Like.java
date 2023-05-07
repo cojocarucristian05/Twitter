@@ -1,37 +1,49 @@
 package com.ligaaclabs.twitter.model;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.util.UUID;
+
+@Data
+@Entity
+@Table(name = "\"like\"")
 public class Like {
 
-    private int id;
-    private Integer postId;
-    private String username;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+    @ManyToOne
+    @JoinColumn(name = "post_fk", nullable = false)
+    private Post post;
 
-    public Like(Integer postId, String username) {
-        this.postId = postId;
-        this.username = username;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_fk", nullable = false)
+    private User user;
 
-    public int getId() {
+    public Like() {}
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public Integer getPostId() {
-        return postId;
+    public Post getPost() {
+        return post;
     }
 
-    public void setPostId(Integer postId) {
-        this.postId = postId;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

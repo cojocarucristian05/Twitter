@@ -1,25 +1,46 @@
 package com.ligaaclabs.twitter.model;
 
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NonNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@Data
+@Entity
 public class Reply {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
+    @Column(name = "content", nullable = false)
     private String content;
 
-    public String username;
+    @ManyToOne
+    @JoinColumn(name = "user_fk", nullable = false)
+    public User user;
     private boolean publicReply;
-    private int parentPostId;
+    @ManyToOne
+    @JoinColumn(name = "post_fk", nullable = false)
+    private Post parentPost;
 
-    private int parentReplyId;
+    @ManyToOne
+    @JoinColumn(name = "parent_reply_fk", nullable = false)
+    private Reply parentReply;
 
-    List<String> replies = new ArrayList<>();
+    public Reply() {}
 
-    public int getId() {
+    @OneToMany
+    List<Reply> replies = new ArrayList<>();
+
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -31,39 +52,39 @@ public class Reply {
         this.content = content;
     }
 
-    public int getParentPostId() {
-        return parentPostId;
+    public Post getParentPost() {
+        return parentPost;
     }
 
-    public void setParentPostId(int parentPostId) {
-        this.parentPostId = parentPostId;
+    public void setParentPost(Post parentPost) {
+        this.parentPost = parentPost;
     }
 
-    public int getParentReplyId() {
-        return parentReplyId;
+    public Reply getParentReply() {
+        return parentReply;
     }
 
-    public void setParentReplyId(int parentReplyId) {
-        this.parentReplyId = parentReplyId;
+    public void setParentReply(Reply parentReply) {
+        this.parentReply = parentReply;
     }
 
     public void setPublicReply(boolean publicReply) {
         this.publicReply = publicReply;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public List<String> getReplies() {
+    public List<Reply> getReplies() {
         return replies;
     }
 
-    public void setReplies(List<String> replies) {
+    public void setReplies(List<Reply> replies) {
         this.replies = replies;
     }
 }

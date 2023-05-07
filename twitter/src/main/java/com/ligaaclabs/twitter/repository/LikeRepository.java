@@ -1,8 +1,11 @@
 package com.ligaaclabs.twitter.repository;
 
 import com.ligaaclabs.twitter.model.Like;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-public interface LikeRepository {
+import java.util.UUID;
 
-    void createLike(Like like);
+@RepositoryRestResource
+public interface LikeRepository extends JpaRepository<Like, UUID> {
 }

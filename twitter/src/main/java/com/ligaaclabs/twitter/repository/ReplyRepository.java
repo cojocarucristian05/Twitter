@@ -1,10 +1,15 @@
 package com.ligaaclabs.twitter.repository;
 
 import com.ligaaclabs.twitter.model.Reply;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
-public interface ReplyRepository {
+import java.util.UUID;
 
-    void createReply(Reply reply);
+@RepositoryRestResource
+public interface ReplyRepository extends JpaRepository<Reply, UUID> {
 
-    Reply getReplyByParentId(Integer id);
+//    void createReply(Reply reply);
+//
+//    Reply getReplyByParentId(Integer id);
 }

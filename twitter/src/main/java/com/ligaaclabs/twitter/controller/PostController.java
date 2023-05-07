@@ -19,8 +19,8 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping("/posts")
-    public List<Post> getAllPost() {
-        return postService.getAllPosts();
-    }
+//    @GetMapping("/posts")
+//    public List<Post> getAllPost() {
+//        return postService.getAllPosts();
+//    }
 }

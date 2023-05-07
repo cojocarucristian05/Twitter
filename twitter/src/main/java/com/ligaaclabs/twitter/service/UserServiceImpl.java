@@ -3,8 +3,10 @@ package com.ligaaclabs.twitter.service;
 import com.ligaaclabs.twitter.model.Post;
 import com.ligaaclabs.twitter.model.User;
 import com.ligaaclabs.twitter.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -15,48 +17,56 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean searchByUsername(User user) {
-        return userRepository.findByUsername(user);
+    public boolean search(User user) {
+        return userRepository.existsById(user.getUserId());
     }
 
     @Override
-    public void registerUser(User user) {
-        userRepository.createUser(user);
-    }
-
-    public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
-    }
-
-    @Override
-    public List<User> getSearchUsers(String query) {
-        return userRepository.getSearchUsers(query);
-    }
-
-    @Override
-    public boolean search(String query) {
-        return userRepository.search(query);
-    }
-
-    @Override
-    public boolean follow(String usernameFollower, String usernameFollowed) {
-        User follower = userRepository.searchByUsername(usernameFollower);
-        User followed = userRepository.searchByUsername(usernameFollowed);
-        if (follower != null && followed != null && !follower.getFollowing().contains(usernameFollowed)) {
-            followed.getFollowers().add(usernameFollower);
-            follower.getFollowing().add(usernameFollowed);
-            return true;
+    public ResponseEntity<?> registerUser(User user) {
+        if (search(user)) {
+            return ResponseEntity.badRequest().body("User already exists!");
         }
-        return false;
+
+        userRepository.save(user);
+        return ResponseEntity.ok("User registered successfully!");
     }
 
-    @Override
-    public void addPost(User user, Post post) {
-        userRepository.addPost(user, post);
-    }
+//    public List<User> getAllUsers() {
+//        return userRepository.getAllUsers();
+//    }
+//
+//    @Override
+//    public List<User> getSearchUsers(String query) {
+//        return userRepository.getSearchUsers(query);
+//    }
+//
+//    @Override
+//    public boolean search(String query) {
+//        return userRepository.search(query);
+//    }
 
     @Override
-    public User getByUsername(String username) {
-        return userRepository.searchByUsername(username);
+    public ResponseEntity<?> follow(UUID idFollower, UUID idFollowed) {
+        if (userRepository.findById(idFollower).isPresent()
+                && userRepository.findById(idFollowed).isPresent()) {
+            User followed  = userRepository.findById(idFollowed).get();
+            User follower  = userRepository.findById(idFollower).get();
+            followed.getFollowers().add(follower);
+            follower.getFollowing().add(followed);
+            userRepository.save(followed);
+            userRepository.save(follower);
+            return ResponseEntity.ok("Follow succeed!");
+        }
+        return ResponseEntity.badRequest().body("Follow denied!");
     }
+
+//    @Override
+//    public void addPost(User user, Post post) {
+//        userRepository.addPost(user, post);
+//    }
+//
+//    @Override
+//    public User getByUsername(String username) {
+//        return userRepository.searchByUsername(username);
+//    }
 }

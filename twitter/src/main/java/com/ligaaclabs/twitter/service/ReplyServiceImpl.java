@@ -4,6 +4,8 @@ import com.ligaaclabs.twitter.model.Reply;
 import com.ligaaclabs.twitter.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class ReplyServiceImpl implements ReplyService {
 
@@ -15,12 +17,12 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public void addReply(Reply reply) {
-        replyRepository.createReply(reply);
+        replyRepository.save(reply);
     }
 
     @Override
-    public Reply getReplyByParentId(Integer replyParentId) {
-        return replyRepository.getReplyByParentId(replyParentId);
+    public Reply getReplyByParentId(UUID replyParentId) {
+        return replyRepository.getReferenceById(replyParentId);
     }
 
 }
