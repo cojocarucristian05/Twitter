@@ -1,7 +1,9 @@
 package com.ligaaclabs.twitter.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jdk.jfr.Enabled;
 import lombok.Data;
 import net.minidev.json.annotate.JsonIgnore;
@@ -13,7 +15,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "\"user\"")
-@JsonIgnoreProperties({"followers", "following"})
+@JsonIgnoreProperties({"followers", "following", "posts", "likes"})
 public class User {
 
     @Id
@@ -31,28 +33,27 @@ public class User {
     private String lastname;
 
     @Column(name = "email", nullable = false, unique = true)
+    @Email
     private String email;
 
     @Column(name = "password", nullable = false)
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)     //this resolve "LazyInitializationException"
     private List<User> followers;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<User> following;
-//
-//    @OneToMany
-//    private List<Post> posts;
-//
-//    @OneToMany
-//    private List<Like> likes;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Like> likes;
 
     public User() { }
-//    public List<Post> getPosts() {
-//        return posts;
-//    }
 
     public User(UUID userId, String username, String firstname, String lastname, String email, String password) {
         this.userId = userId;
@@ -91,11 +92,17 @@ public class User {
         return following;
     }
 
-//    public void setPosts(List<Post> posts) {
-//        this.posts = posts;
-//    }
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
 
-//    public List<Like> getLikes() {
-//        return likes;
-//    }
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
 }

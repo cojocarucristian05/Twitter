@@ -1,10 +1,5 @@
 package com.ligaaclabs.twitter.controller;
 
-import com.ligaaclabs.twitter.advice.exception.PostNotFoundException;
-import com.ligaaclabs.twitter.advice.exception.UserNotFoundException;
-import com.ligaaclabs.twitter.model.Like;
-import com.ligaaclabs.twitter.model.Post;
-import com.ligaaclabs.twitter.model.Reply;
 import com.ligaaclabs.twitter.model.User;
 import com.ligaaclabs.twitter.service.LikeService;
 import com.ligaaclabs.twitter.service.PostService;
@@ -21,43 +16,28 @@ import java.util.*;
 @RequestMapping(path = "api/v1/user")
 public class UserController {
 
-    @Autowired
     private final UserService userService;
 
-    @Autowired
     private final PostService postService;
 
-    @Autowired
-    private final LikeService likeService;
+//    private final LikeService likeService;
+//
+//    private final ReplyService replyService;
 
     @Autowired
-    private final ReplyService replyService;
-
-    public UserController(UserService userService, PostService postService, LikeService likeService, ReplyService replyService) {
+    public UserController(UserService userService, PostService postService) {
         this.userService = userService;
         this.postService = postService;
-        this.likeService = likeService;
-        this.replyService = replyService;
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
         return userService.registerUser(user);
     }
-//
-//    @GetMapping("/users")
-//    public List<User> getAllUsers() {
-//        return userService.getAllUsers();
-//    }
-//
-//    @GetMapping("/search/{query}")
-//    public List<User> getSearchUsers(@PathVariable String query) {
-//        return userService.getSearchUsers(query);
-//    }
-//
+
     @PostMapping("/{idFollower}/follow/{idFollowed}")
     public ResponseEntity<?> follow(@PathVariable UUID idFollower, @PathVariable UUID idFollowed) {
-       return userService.follow(idFollower, idFollowed);
+        return userService.follow(idFollower, idFollowed);
     }
 //
 //    @PostMapping("/add_post/{username}")

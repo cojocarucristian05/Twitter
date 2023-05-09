@@ -1,8 +1,10 @@
 package com.ligaaclabs.twitter.service;
 
-import com.ligaaclabs.twitter.model.Post;
 import com.ligaaclabs.twitter.model.User;
 import com.ligaaclabs.twitter.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
+    @Autowired
     public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -23,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> registerUser(User user) {
-        if (search(user)) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("User already exists!");
         }
 
@@ -31,19 +34,11 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok("User registered successfully!");
     }
 
-//    public List<User> getAllUsers() {
-//        return userRepository.getAllUsers();
-//    }
-//
-//    @Override
-//    public List<User> getSearchUsers(String query) {
-//        return userRepository.getSearchUsers(query);
-//    }
-//
-//    @Override
-//    public boolean search(String query) {
-//        return userRepository.search(query);
-//    }
+    @Transactional
+    @Override
+    public List<User> getSearchUsers(String query) {
+        return userRepository.findByUsernameOrFirstnameOrLastname(query, query, query);
+    }
 
     @Override
     public ResponseEntity<?> follow(UUID idFollower, UUID idFollowed) {
@@ -60,13 +55,4 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.badRequest().body("Follow denied!");
     }
 
-//    @Override
-//    public void addPost(User user, Post post) {
-//        userRepository.addPost(user, post);
-//    }
-//
-//    @Override
-//    public User getByUsername(String username) {
-//        return userRepository.searchByUsername(username);
-//    }
 }

@@ -1,16 +1,9 @@
 package com.ligaaclabs.twitter.repository;
 
-import com.ligaaclabs.twitter.model.Post;
-import com.ligaaclabs.twitter.model.User;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 @Repository
-public class UserRepositoryImple {
+public class UserRepositoryImpl {
 //    implements UserRepository {
 //    private Map<Integer, User> USERS = new HashMap<>();
 //    private Integer index = 0;

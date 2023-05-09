@@ -9,6 +9,7 @@ import java.util.UUID;
 
 @Data
 @Entity
+@Table(name = "post")
 public class Post {
 
     @Id
@@ -23,14 +24,14 @@ public class Post {
     @Column(name = "date", nullable = false)
     private LocalDateTime date;
 
-    @ManyToOne
-    @JoinColumn(name = "user_fk", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Like> likes;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Reply> replies;
 
     public LocalDateTime getDate() {

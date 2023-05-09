@@ -68,6 +68,7 @@
 			<artifactId>spring-boot-starter-data-rest</artifactId>
 		</dependency>
 
+
 	</dependencies>
 
 	<build>

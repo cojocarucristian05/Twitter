@@ -15,12 +15,8 @@ public interface UserService {
     boolean search(User user);
     ResponseEntity<?> registerUser(User user);
 
-//    List<User> getAllUsers();
-//
-//    List<User> getSearchUsers(String query);
-//
-//    boolean search(String query);
-//
+    List<User> getSearchUsers(String query);
+
     ResponseEntity<?> follow(UUID idFollower, UUID idFollowed);
 //
 //    void addPost(User user, Post post);
