@@ -37,6 +37,7 @@ public class PostServiceImpl implements PostService {
         post.setContent(content);
         post.setUser(user);
         postRepository.save(post);
+        user.getPosts().add(post);
         return ResponseEntity.ok("Post added!");
     }
 

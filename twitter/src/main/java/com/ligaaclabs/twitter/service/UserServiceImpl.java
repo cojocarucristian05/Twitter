@@ -31,6 +31,11 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok("User registered successfully!");
     }
 
+    @Override
+    public List<User> search(String query) {
+        return userRepository.searchByUsernameOrLastnameOrFirstname(query, query, query);
+    }
+
 //    public List<User> getAllUsers() {
 //        return userRepository.getAllUsers();
 //    }

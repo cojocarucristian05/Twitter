@@ -17,7 +17,7 @@ public interface UserService {
 
 //    List<User> getAllUsers();
 //
-//    List<User> getSearchUsers(String query);
+    List<User> search(String query);
 //
 //    boolean search(String query);
 //

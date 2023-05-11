@@ -1,6 +1,7 @@
 package com.ligaaclabs.twitter.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jdk.jfr.Enabled;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "\"user\"")
-@JsonIgnoreProperties({"followers", "following"})
+@JsonIgnoreProperties({"followers", "following", "posts"})
 public class User {
 
     @Id
@@ -34,17 +35,16 @@ public class User {
     private String email;
 
     @Column(name = "password", nullable = false)
-    @JsonIgnore
     private String password;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<User> followers;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private List<User> following;
-//
-//    @OneToMany
-//    private List<Post> posts;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Post> posts;
 //
 //    @OneToMany
 //    private List<Like> likes;
@@ -98,4 +98,13 @@ public class User {
 //    public List<Like> getLikes() {
 //        return likes;
 //    }
+    @JsonIgnore
+    public String getPassword() {
+        return password;
+    }
+
+    @JsonProperty
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

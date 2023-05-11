@@ -11,6 +11,7 @@ import java.util.UUID;
 
 @RepositoryRestResource
 public interface UserRepository extends JpaRepository<User, UUID> {
+    List<User> searchByUsernameOrLastnameOrFirstname(String username, String lastname, String firstname);
 //    void createUser(User user);
 //    boolean findByUsername(User user);
 //

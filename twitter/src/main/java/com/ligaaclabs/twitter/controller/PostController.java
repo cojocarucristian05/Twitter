@@ -29,6 +29,8 @@ public class PostController {
         return postService.addPost(userId, content);
     }
 
+
+
 //    @GetMapping("/posts")
 //    public List<Post> getAllPost() {
 //        return postService.getAllPosts();

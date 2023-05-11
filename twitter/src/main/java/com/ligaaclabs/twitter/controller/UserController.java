@@ -21,18 +21,16 @@ import java.util.*;
 @RequestMapping(path = "api/v1/user")
 public class UserController {
 
-    @Autowired
+
     private final UserService userService;
 
-    @Autowired
     private final PostService postService;
 
-    @Autowired
     private final LikeService likeService;
 
-    @Autowired
     private final ReplyService replyService;
 
+    @Autowired
     public UserController(UserService userService, PostService postService, LikeService likeService, ReplyService replyService) {
         this.userService = userService;
         this.postService = postService;
@@ -50,10 +48,10 @@ public class UserController {
 //        return userService.getAllUsers();
 //    }
 //
-//    @GetMapping("/search/{query}")
-//    public List<User> getSearchUsers(@PathVariable String query) {
-//        return userService.getSearchUsers(query);
-//    }
+    @GetMapping("/search/{query}")
+    public List<User> getSearchUsers(@PathVariable String query) {
+        return userService.search(query);
+    }
 //
     @PostMapping("/{idFollower}/follow/{idFollowed}")
     public ResponseEntity<?> follow(@PathVariable UUID idFollower, @PathVariable UUID idFollowed) {
