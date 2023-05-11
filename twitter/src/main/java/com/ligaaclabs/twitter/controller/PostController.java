@@ -1,12 +1,14 @@
 package com.ligaaclabs.twitter.controller;
 
 import com.ligaaclabs.twitter.model.Post;
+import com.ligaaclabs.twitter.model.User;
 import com.ligaaclabs.twitter.service.PostService;
 import com.ligaaclabs.twitter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,7 +31,10 @@ public class PostController {
         return postService.addPost(userId, content);
     }
 
-
+    @GetMapping("/{userId}/posts")
+    public List<Post> getOwnPosts(@PathVariable UUID userId, @RequestParam(required = false) LocalDateTime timestamp) {
+        return postService.getOwnPostsByTimestamp(userId, timestamp);
+    }
 
 //    @GetMapping("/posts")
 //    public List<Post> getAllPost() {

@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -37,8 +39,20 @@ public class PostServiceImpl implements PostService {
         post.setContent(content);
         post.setUser(user);
         postRepository.save(post);
-        user.getPosts().add(post);
         return ResponseEntity.ok("Post added!");
+    }
+
+    @Override
+    public List<Post> getOwnPostsByTimestamp(UUID userId, LocalDateTime timestamps) {
+        List<Post> posts = postRepository.findPostsByUserId(userId);
+        if(Objects.isNull(timestamps)) {
+            return postRepository.findPostsByUserId(userId);
+        }
+
+        return posts
+                .stream()
+                .filter(post -> post.getDate().isAfter(timestamps))
+                .collect(Collectors.toList());
     }
 
 //    @Override

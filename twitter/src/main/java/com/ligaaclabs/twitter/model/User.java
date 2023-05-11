@@ -43,7 +43,7 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER)
     private List<User> following;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Post> posts;
 //
 //    @OneToMany

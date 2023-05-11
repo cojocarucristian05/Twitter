@@ -3,6 +3,7 @@ package com.ligaaclabs.twitter.repository;
 import com.ligaaclabs.twitter.model.Post;
 import com.ligaaclabs.twitter.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import java.time.LocalDateTime;
@@ -21,5 +22,6 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
 //    List<Post> getOwnPosts(User user);
 //
 //    Post getPostById(Integer id);
-
+    @Query("SELECT p FROM Post p WHERE p.user = ?1")
+    List<Post> findPostsByUserId(UUID userId);
 }

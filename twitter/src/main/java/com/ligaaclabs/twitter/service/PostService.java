@@ -15,7 +15,7 @@ public interface PostService {
 //
 //    List<Post> getAllPosts();
 //
-//    List<Post> getOwnPostsByTimestamp(User user, LocalDateTime timestamps);
+    List<Post> getOwnPostsByTimestamp(UUID userId, LocalDateTime timestamps);
 //
 //    List<Post> getOwnPosts(User user);
 //
