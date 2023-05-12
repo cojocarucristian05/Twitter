@@ -1,5 +1,6 @@
 package com.ligaaclabs.twitter.controller;
 
+import com.ligaaclabs.twitter.model.dto.UserDTO;
 import com.ligaaclabs.twitter.model.entities.User;
 import com.ligaaclabs.twitter.service.LikeService;
 import com.ligaaclabs.twitter.service.PostService;
@@ -43,7 +44,7 @@ public class UserController {
 //    }
 //
     @GetMapping("/search/{query}")
-    public List<User> getSearchUsers(@PathVariable String query) {
+    public List<UserDTO> getSearchUsers(@PathVariable String query) {
         return userService.search(query);
     }
 //

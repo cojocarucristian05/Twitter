@@ -1,5 +1,6 @@
 package com.ligaaclabs.twitter.service;
 
+import com.ligaaclabs.twitter.model.dto.UserDTO;
 import com.ligaaclabs.twitter.model.entities.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ public interface UserService {
 
 //    List<User> getAllUsers();
 //
-    List<User> search(String query);
+    List<UserDTO> search(String query);
 //
 //    boolean search(String query);
 //
