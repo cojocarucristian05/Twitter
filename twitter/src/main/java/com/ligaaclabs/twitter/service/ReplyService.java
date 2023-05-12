@@ -1,6 +1,6 @@
 package com.ligaaclabs.twitter.service;
 
-import com.ligaaclabs.twitter.model.Reply;
+import com.ligaaclabs.twitter.model.entities.Reply;
 
 import java.util.UUID;
 

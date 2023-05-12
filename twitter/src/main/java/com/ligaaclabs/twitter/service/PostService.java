@@ -1,8 +1,7 @@
 package com.ligaaclabs.twitter.service;
 
 
-import com.ligaaclabs.twitter.model.Post;
-import com.ligaaclabs.twitter.model.User;
+import com.ligaaclabs.twitter.model.entities.Post;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;

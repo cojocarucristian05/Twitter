@@ -1,8 +1,6 @@
 package com.ligaaclabs.twitter.service;
 
-import com.ligaaclabs.twitter.model.Like;
-import com.ligaaclabs.twitter.model.Post;
-import com.ligaaclabs.twitter.model.User;
+import com.ligaaclabs.twitter.model.entities.Like;
 import com.ligaaclabs.twitter.repository.LikeRepository;
 
 import org.springframework.stereotype.Service;

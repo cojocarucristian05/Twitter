@@ -1,10 +1,6 @@
 package com.ligaaclabs.twitter.repository;
 
-import com.ligaaclabs.twitter.model.Reply;
 import org.springframework.stereotype.Repository;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Repository
 public class ReplyRepositoryImpl {

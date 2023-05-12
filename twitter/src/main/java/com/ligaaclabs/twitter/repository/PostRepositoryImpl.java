@@ -1,13 +1,6 @@
 package com.ligaaclabs.twitter.repository;
 
-import com.ligaaclabs.twitter.advice.exception.PostNotFoundException;
-import com.ligaaclabs.twitter.model.Post;
-import com.ligaaclabs.twitter.model.User;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class PostRepositoryImpl {

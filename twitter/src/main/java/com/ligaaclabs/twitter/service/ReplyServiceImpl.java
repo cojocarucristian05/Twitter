@@ -1,6 +1,6 @@
 package com.ligaaclabs.twitter.service;
 
-import com.ligaaclabs.twitter.model.Reply;
+import com.ligaaclabs.twitter.model.entities.Reply;
 import com.ligaaclabs.twitter.repository.ReplyRepository;
 import org.springframework.stereotype.Service;
 

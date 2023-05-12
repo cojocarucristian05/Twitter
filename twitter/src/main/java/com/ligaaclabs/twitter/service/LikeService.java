@@ -1,6 +1,6 @@
 package com.ligaaclabs.twitter.service;
 
-import com.ligaaclabs.twitter.model.Like;
+import com.ligaaclabs.twitter.model.entities.Like;
 
 public interface LikeService {
 

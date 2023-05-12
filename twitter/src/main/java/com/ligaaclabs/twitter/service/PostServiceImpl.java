@@ -1,7 +1,7 @@
 package com.ligaaclabs.twitter.service;
 
-import com.ligaaclabs.twitter.model.Post;
-import com.ligaaclabs.twitter.model.User;
+import com.ligaaclabs.twitter.model.entities.Post;
+import com.ligaaclabs.twitter.model.entities.User;
 import com.ligaaclabs.twitter.repository.PostRepository;
 import com.ligaaclabs.twitter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

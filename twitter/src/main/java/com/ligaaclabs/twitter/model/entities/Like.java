@@ -1,4 +1,4 @@
-package com.ligaaclabs.twitter.model;
+package com.ligaaclabs.twitter.model.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

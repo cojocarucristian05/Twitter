@@ -1,11 +1,6 @@
 package com.ligaaclabs.twitter.controller;
 
-import com.ligaaclabs.twitter.advice.exception.PostNotFoundException;
-import com.ligaaclabs.twitter.advice.exception.UserNotFoundException;
-import com.ligaaclabs.twitter.model.Like;
-import com.ligaaclabs.twitter.model.Post;
-import com.ligaaclabs.twitter.model.Reply;
-import com.ligaaclabs.twitter.model.User;
+import com.ligaaclabs.twitter.model.entities.User;
 import com.ligaaclabs.twitter.service.LikeService;
 import com.ligaaclabs.twitter.service.PostService;
 import com.ligaaclabs.twitter.service.ReplyService;
@@ -14,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController

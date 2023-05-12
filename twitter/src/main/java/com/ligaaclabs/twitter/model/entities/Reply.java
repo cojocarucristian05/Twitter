@@ -1,8 +1,7 @@
-package com.ligaaclabs.twitter.model;
+package com.ligaaclabs.twitter.model.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
