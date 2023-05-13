@@ -1,5 +1,6 @@
 package com.ligaaclabs.twitter.controller;
 
+import com.ligaaclabs.twitter.model.dto.PostDTO;
 import com.ligaaclabs.twitter.model.entities.Post;
 import com.ligaaclabs.twitter.service.PostService;
 import com.ligaaclabs.twitter.service.UserService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.plaf.SpinnerUI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -31,12 +33,17 @@ public class PostController {
     }
 
     @GetMapping("/{userId}/posts")
-    public List<Post> getOwnPosts(@PathVariable UUID userId, @RequestParam(required = false) LocalDateTime timestamp) {
+    public List<PostDTO> getOwnPosts(@PathVariable UUID userId, @RequestParam(required = false) LocalDateTime timestamp) {
         return postService.getOwnPostsByTimestamp(userId, timestamp);
     }
 
-//    @GetMapping("/posts")
-//    public List<Post> getAllPost() {
+    @GetMapping("/{userId}/feed")
+    public List<PostDTO> getFeed(@PathVariable UUID userId) {
+        return postService.getFeed(userId);
+    }
+
+//    @GetMapping
+//    public List<PostDTO> getAllPosts() {
 //        return postService.getAllPosts();
 //    }
 }

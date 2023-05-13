@@ -14,14 +14,14 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "post_id", nullable = false)
-    private UUID id;
+    private UUID postId;
 
 
     @Column(name = "content", nullable = false)
     private String content;
 
     @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    private LocalDateTime postDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -33,15 +33,12 @@ public class Post {
     @OneToMany
     private List<Reply> replies;
 
-    public LocalDateTime getDate() {
-        return date;
-    }
 
     public Post() {}
-    public Post(UUID id, String content, LocalDateTime date, User user) {
-        this.id = id;
+    public Post(UUID postId, String content, LocalDateTime postDate, User user) {
+        this.postId = postId;
         this.content = content;
-        this.date = date;
+        this.postDate = postDate;
         this.user = user;
         likes = new ArrayList<>();
         replies = new ArrayList<>();
@@ -55,23 +52,20 @@ public class Post {
         this.user = user;
     }
 
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                "content='" + content + '\'' +
-                ", date=" + date +
-                ", user=" + user +
-                ", likes=" + likes +
-                '}';
+    public LocalDateTime getDate() {
+        return postDate;
+    }
+
+    public void setPostDate(LocalDateTime postDate) {
+        this.postDate = postDate;
     }
 
     public UUID getId() {
-        return id;
+        return postId;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setId(UUID postId) {
+        this.postId = postId;
     }
 
     public List<Like> getLikes() {
@@ -88,5 +82,16 @@ public class Post {
 
     public List<Reply> getReplies() {
         return replies;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + postId +
+                "content='" + content + '\'' +
+                ", date=" + postDate +
+                ", user=" + user +
+                ", likes=" + likes +
+                '}';
     }
 }

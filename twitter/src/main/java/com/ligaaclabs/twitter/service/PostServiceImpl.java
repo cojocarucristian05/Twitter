@@ -1,13 +1,16 @@
 package com.ligaaclabs.twitter.service;
 
+import com.ligaaclabs.twitter.advice.exception.UserNotFoundException;
+import com.ligaaclabs.twitter.mapper.PostMapper;
+import com.ligaaclabs.twitter.model.dto.PostDTO;
 import com.ligaaclabs.twitter.model.entities.Post;
 import com.ligaaclabs.twitter.model.entities.User;
 import com.ligaaclabs.twitter.repository.PostRepository;
 import com.ligaaclabs.twitter.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -20,10 +23,12 @@ public class PostServiceImpl implements PostService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    public PostServiceImpl(UserRepository userRepository, PostRepository postRepository) {
+    private final PostMapper postMapper;
+
+    public PostServiceImpl(UserRepository userRepository, PostRepository postRepository, PostMapper postMapper) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
+        this.postMapper = postMapper;
     }
 
     @Override
@@ -34,7 +39,7 @@ public class PostServiceImpl implements PostService {
 
         User user = userRepository.findById(userId).get();
         Post post = new Post();
-        post.setDate(LocalDateTime.now());
+        post.setPostDate(LocalDateTime.now());
         post.setId(UUID.randomUUID());
         post.setContent(content);
         post.setUser(user);
@@ -42,44 +47,45 @@ public class PostServiceImpl implements PostService {
         return ResponseEntity.ok("Post added!");
     }
 
+
     @Override
-    public List<Post> getOwnPostsByTimestamp(UUID userId, LocalDateTime timestamps) {
+    public List<PostDTO> getOwnPostsByTimestamp(UUID userId, LocalDateTime timestamps) {
         List<Post> posts = postRepository.findPostsByUserId(userId);
         if(Objects.isNull(timestamps)) {
-            return postRepository.findPostsByUserId(userId);
+            return postRepository.findPostsByUserId(userId)
+                    .stream()
+                    .map(postMapper::postToPostDTO)
+                    .collect(Collectors.toList());
         }
 
         return posts
                 .stream()
                 .filter(post -> post.getDate().isAfter(timestamps))
+                .map(postMapper::postToPostDTO)
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<PostDTO> getFeed(UUID userId) {
+        if(!userRepository.findById(userId).isPresent()) {
+            throw new UserNotFoundException("User not found!");
+        }
+        User user = userRepository.findById(userId).get();
+        List<PostDTO> feed = new ArrayList<>();
+        for(User followed : user.getFollowing()) {
+            System.out.println(followed.getUsername());
+            feed.addAll(postRepository.findPostsByUserId(followed.getUserId())
+                    .stream()
+                    .map(postMapper::postToPostDTO).toList()
+            );
+        }
+        return feed;
+    }
 //    @Override
-//    public void addPost(User user, Integer id, String content) {
-//        Post post = new Post(UUID.randomUUID(), content, LocalDateTime.now(), user);
-//        user.getPosts().add(post);
-//        postRepository.save(post);
+//    public List<PostDTO> getAllPosts() {
+//        return postRepository.findAll()
+//                .stream()
+//                .map(postMapper::postToPostDTO)
+//                .collect(Collectors.toList());
 //    }
-
-//    @Override
-//    public List<Post> getAllPosts() {
-//        return postRepository.getAllPosts();
-//    }
-//
-//    @Override
-//    public List<Post> getOwnPostsByTimestamp(User user, LocalDateTime timestamps) {
-//        return postRepository.getOwnPostsByTimestamp(user, timestamps);
-//    }
-//
-//    @Override
-//    public List<Post> getOwnPosts(User user) {
-//        return postRepository.getOwnPosts(user);
-//    }
-//
-//    @Override
-//    public Post getPostById(Integer id) {
-//        return postRepository.getPostById(id);
-//    }
-
 }

@@ -49,9 +49,6 @@ public class User {
 //    private List<Like> likes;
 
     public User() { }
-//    public List<Post> getPosts() {
-//        return posts;
-//    }
 
     public User(UUID userId, String username, String firstname, String lastname, String email, String password) {
         this.userId = userId;
@@ -90,20 +87,4 @@ public class User {
         return following;
     }
 
-//    public void setPosts(List<Post> posts) {
-//        this.posts = posts;
-//    }
-
-//    public List<Like> getLikes() {
-//        return likes;
-//    }
-    @JsonIgnore
-    public String getPassword() {
-        return password;
-    }
-
-    @JsonProperty
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

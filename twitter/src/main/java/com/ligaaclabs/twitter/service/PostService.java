@@ -1,6 +1,7 @@
 package com.ligaaclabs.twitter.service;
 
 
+import com.ligaaclabs.twitter.model.dto.PostDTO;
 import com.ligaaclabs.twitter.model.entities.Post;
 import org.springframework.http.ResponseEntity;
 
@@ -10,14 +11,7 @@ import java.util.UUID;
 
 public interface PostService {
     ResponseEntity<?> addPost(UUID userId, String content);
-//    void addPost(User user, Integer id, String content);
-//
-//    List<Post> getAllPosts();
-//
-    List<Post> getOwnPostsByTimestamp(UUID userId, LocalDateTime timestamps);
-//
-//    List<Post> getOwnPosts(User user);
-//
-//    Post getPostById(Integer id);
-
+//    List<PostDTO> getAllPosts();
+    List<PostDTO> getOwnPostsByTimestamp(UUID userId, LocalDateTime timestamps);
+    List<PostDTO> getFeed(UUID userId);
 }

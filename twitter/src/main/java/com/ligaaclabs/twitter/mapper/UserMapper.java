@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
+    @Mapping(target = "userId", source = "userId")
     @Mapping(target = "username", source = "username")
     @Mapping(target = "firstname", source = "firstname")
     @Mapping(target = "lastname", source = "lastname")

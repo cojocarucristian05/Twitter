@@ -45,20 +45,6 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-//    public List<User> getAllUsers() {
-//        return userRepository.getAllUsers();
-//    }
-//
-//    @Override
-//    public List<User> getSearchUsers(String query) {
-//        return userRepository.getSearchUsers(query);
-//    }
-//
-//    @Override
-//    public boolean search(String query) {
-//        return userRepository.search(query);
-//    }
-
     @Override
     public ResponseEntity<?> follow(UUID idFollower, UUID idFollowed) {
         if (userRepository.findById(idFollower).isPresent()
@@ -73,14 +59,4 @@ public class UserServiceImpl implements UserService {
         }
         return ResponseEntity.badRequest().body("Follow denied!");
     }
-
-//    @Override
-//    public void addPost(User user, Post post) {
-//        userRepository.addPost(user, post);
-//    }
-//
-//    @Override
-//    public User getByUsername(String username) {
-//        return userRepository.searchByUsername(username);
-//    }
 }

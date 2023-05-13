@@ -14,11 +14,11 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     @ManyToOne
-    @JoinColumn(name = "post_fk", nullable = false)
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "user_fk", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Like() {}
