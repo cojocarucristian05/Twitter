@@ -1,9 +1,11 @@
 package com.ligaaclabs.twitter.service;
 
 import com.ligaaclabs.twitter.advice.exception.UserNotFoundException;
+import com.ligaaclabs.twitter.mapper.LikeMapper;
 import com.ligaaclabs.twitter.mapper.PostMapper;
 import com.ligaaclabs.twitter.model.dto.LikeDTO;
 import com.ligaaclabs.twitter.model.dto.PostDTO;
+import com.ligaaclabs.twitter.model.dto.PostResponseDTO;
 import com.ligaaclabs.twitter.model.entities.Like;
 import com.ligaaclabs.twitter.model.entities.Post;
 import com.ligaaclabs.twitter.model.entities.User;
@@ -30,14 +32,18 @@ public class PostServiceImpl implements PostService {
 
     private final PostMapper postMapper;
 
+    private final LikeMapper likeMapper;
+
     public PostServiceImpl(UserRepository userRepository,
                            PostRepository postRepository,
                            LikeRepository likeRepository,
-                           PostMapper postMapper) {
+                           PostMapper postMapper,
+                           LikeMapper likeMapper) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.likeRepository = likeRepository;
         this.postMapper = postMapper;
+        this.likeMapper = likeMapper;
     }
 
     @Override
@@ -52,34 +58,34 @@ public class PostServiceImpl implements PostService {
         post.setId(UUID.randomUUID());
         post.setContent(content);
         post.setUser(user);
+        user.getPosts().add(post);
         postRepository.save(post);
-        //user.getPosts().add(post);
         return ResponseEntity.ok("Post added!");
     }
 
 
     @Override
-    public List<PostDTO> getOwnPostsByTimestamp(String username, LocalDateTime timestamps) {
+    public List<PostResponseDTO> getOwnPostsByTimestamp(String username, LocalDateTime timestamps) {
         List<Post> posts = postRepository.findAll();
-        System.out.println(posts);
-//        if(Objects.isNull(timestamps)) {
-//            return postRepository.findAllByUserUserId(userId)
-//                    .stream()
-//                    .map(postMapper::postToPostDTO)
-//                    .collect(Collectors.toList());
-//        }
-//
-//        return posts
-//                .stream()
-//                .filter(post -> post.getDate().isAfter(timestamps))
-//                .map(postMapper::postToPostDTO)
-//                .collect(Collectors.toList());
-        return null;
+        if(Objects.isNull(timestamps)) {
+            return posts
+                    .stream()
+                    .filter(post -> post.getUser().getUsername().equals(username))
+                    .map(postMapper::postToPostResponseDTO)
+                    .collect(Collectors.toList());
+        }
+
+        return posts
+                .stream()
+                .filter(post -> post.getUser().getUsername().equals(username))
+                .filter(post -> post.getDate().isAfter(timestamps))
+                .map(postMapper::postToPostResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<PostDTO> getFeed(UUID userId) {
-        if(!userRepository.findById(userId).isPresent()) {
+        if(userRepository.findById(userId).isEmpty()) {
             throw new UserNotFoundException("User not found!");
         }
         User user = userRepository.findById(userId).get();
@@ -97,30 +103,31 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public ResponseEntity<?> likePost(LikeDTO likeDTO) {
-        if(!postRepository.findById(likeDTO.getPostId()).isPresent()) {
+        if(postRepository.findById(likeDTO.getPostId()).isEmpty()) {
             return ResponseEntity.badRequest().body("Post not found!");
         }
 
-        if(!userRepository.findUserByUsername(likeDTO.getUsername()).isPresent()) {
+        if(userRepository.findById(likeDTO.getUserId()).isEmpty()) {
             return ResponseEntity.badRequest().body("User not found!");
         }
 
         Post post = postRepository.findById(likeDTO.getPostId()).get();
-        User user = userRepository.findUserByUsername(likeDTO.getUsername()).get();
+        User user = userRepository.findById(likeDTO.getUserId()).get();
         Like like = new Like();
+        like.setId(UUID.randomUUID());
         like.setPost(post);
         like.setUser(user);
-        like.setId(UUID.randomUUID());
-        likeRepository.save(like);
         post.getLikes().add(like);
-        user.getLikes().add(like);
+        System.out.println(post.getUser());
+//        post.getUser().getLikes().add(like);
+        likeRepository.save(like);
         return ResponseEntity.ok("Like added!");
     }
     @Override
-    public List<PostDTO> getAllPosts() {
+    public List<PostResponseDTO> getAllPosts() {
         return postRepository.findAll()
                 .stream()
-                .map(postMapper::postToPostDTO)
+                .map(postMapper::postToPostResponseDTO)
                 .collect(Collectors.toList());
     }
 }

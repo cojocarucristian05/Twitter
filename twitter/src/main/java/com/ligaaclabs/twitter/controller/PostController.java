@@ -2,6 +2,7 @@ package com.ligaaclabs.twitter.controller;
 
 import com.ligaaclabs.twitter.model.dto.LikeDTO;
 import com.ligaaclabs.twitter.model.dto.PostDTO;
+import com.ligaaclabs.twitter.model.dto.PostResponseDTO;
 import com.ligaaclabs.twitter.service.PostService;
 import com.ligaaclabs.twitter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class PostController {
     }
 
     @GetMapping("/{username}/posts")
-    public List<PostDTO> getOwnPosts(@PathVariable String username, @RequestParam(required = false) LocalDateTime timestamp) {
+    public List<PostResponseDTO> getOwnPosts(@PathVariable String username, @RequestParam(required = false) LocalDateTime timestamp) {
         return postService.getOwnPostsByTimestamp(username, timestamp);
     }
 
@@ -46,7 +47,7 @@ public class PostController {
         return postService.likePost(likeDTO);
     }
     @GetMapping
-    public List<PostDTO> getAllPosts() {
+    public List<PostResponseDTO> getAllPosts() {
         return postService.getAllPosts();
     }
 }

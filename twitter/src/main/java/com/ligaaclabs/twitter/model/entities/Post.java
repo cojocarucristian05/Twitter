@@ -24,15 +24,15 @@ public class Post {
     @Column(name = "date", nullable = false)
     private LocalDateTime postDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany
-    private List<Like> likes;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Like> likes = new ArrayList<>();
 
     @OneToMany
-    private List<Reply> replies;
+    private List<Reply> replies = new ArrayList<>();
 
 
     public Post() {}
@@ -41,8 +41,8 @@ public class Post {
         this.content = content;
         this.postDate = postDate;
         this.user = user;
-        likes = new ArrayList<>();
-        replies = new ArrayList<>();
+//        likes = new ArrayList<>();
+//        replies = new ArrayList<>();
     }
 
     public User getUser() {

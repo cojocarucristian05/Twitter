@@ -1,6 +1,7 @@
 package com.ligaaclabs.twitter.mapper;
 
 import com.ligaaclabs.twitter.model.dto.PostDTO;
+import com.ligaaclabs.twitter.model.dto.PostResponseDTO;
 import com.ligaaclabs.twitter.model.entities.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,4 +16,9 @@ public interface PostMapper {
     @Mapping(target = "content", source = "content")
     @Mapping(target = "postDate", source = "postDate")
     PostDTO postToPostDTO(Post post);
+
+    @Mapping(target = "content", source = "content")
+    @Mapping(target = "postDate", source = "postDate")
+    @Mapping(target = "likes", source = "likes")
+    PostResponseDTO postToPostResponseDTO(Post post);
 }
