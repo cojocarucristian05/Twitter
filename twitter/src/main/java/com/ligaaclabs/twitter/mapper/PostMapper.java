@@ -10,6 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface PostMapper {
     PostMapper INSTANCE =  Mappers.getMapper(PostMapper.class);
 
+    @Mapping(target = "userId", source = "post.user.userId")
     @Mapping(target = "postId", source = "postId")
     @Mapping(target = "content", source = "content")
     @Mapping(target = "postDate", source = "postDate")

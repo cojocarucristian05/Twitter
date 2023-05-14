@@ -9,6 +9,7 @@ import java.util.UUID;
 @Data
 public class PostDTO {
 
+    private UUID userId;
     private UUID postId;
     private String content;
     private LocalDateTime postDate;

@@ -1,19 +1,19 @@
 package com.ligaaclabs.twitter.model.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Data;
-import net.minidev.json.annotate.JsonIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "\"user\"")
-@JsonIgnoreProperties({"followers", "following", "posts"})
+@JsonIgnoreProperties({"followers", "following", "posts", "likes"})
 public class User {
 
     @Id
@@ -44,9 +44,9 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Post> posts;
-//
-//    @OneToMany
-//    private List<Like> likes;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Like> likes;
 
     public User() { }
 
@@ -59,8 +59,8 @@ public class User {
         this.password = password;
         followers = new ArrayList<>();
         following = new ArrayList<>();
-//        posts = new ArrayList<>();
-//        likes = new ArrayList<>();
+        posts = new ArrayList<>();
+        likes = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -87,4 +87,24 @@ public class User {
         return following;
     }
 
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userId, user.userId) && Objects.equals(username, user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, username, firstname, lastname, email, password, followers, following, posts, likes);
+    }
 }

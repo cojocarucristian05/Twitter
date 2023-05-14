@@ -1,5 +1,6 @@
 package com.ligaaclabs.twitter.model.entities;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 
 import java.time.LocalDateTime;
