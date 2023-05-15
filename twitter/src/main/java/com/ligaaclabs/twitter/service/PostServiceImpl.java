@@ -118,8 +118,10 @@ public class PostServiceImpl implements PostService {
         like.setPost(post);
         like.setUser(user);
         post.getLikes().add(like);
-        System.out.println(post.getUser());
+//        System.out.println(userRepository.findById(post.getUser().getUserId()));
+//        System.out.println(post.getUser());
 //        post.getUser().getLikes().add(like);
+        user.getLikes().add(like);
         likeRepository.save(like);
         return ResponseEntity.ok("Like added!");
     }

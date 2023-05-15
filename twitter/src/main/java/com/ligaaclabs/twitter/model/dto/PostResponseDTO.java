@@ -4,16 +4,20 @@ import com.ligaaclabs.twitter.model.entities.Like;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public class PostResponseDTO {
+
+    private UUID postId;
     private String content;
     private LocalDateTime postDate;
-    private List<Like> likes;
+    private List<LikeResponseDTO> likesResponseDTO;
 
-    public PostResponseDTO(String content, LocalDateTime postDate, List<Like> likes) {
+    public PostResponseDTO(UUID postId, String content, LocalDateTime postDate, List<LikeResponseDTO> likesResponseDTO) {
+        this.postId = postId;
         this.content = content;
         this.postDate = postDate;
-        this.likes = likes;
+        this.likesResponseDTO = likesResponseDTO;
     }
 
     public String getContent() {
@@ -24,7 +28,7 @@ public class PostResponseDTO {
         return postDate;
     }
 
-    public List<Like> getLikes() {
-        return likes;
+    public List<LikeResponseDTO> getLikesResponseDTO() {
+        return likesResponseDTO;
     }
 }
