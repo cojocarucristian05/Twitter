@@ -1,6 +1,5 @@
 package com.ligaaclabs.twitter.model.entities;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,6 +9,7 @@ import java.util.UUID;
 
 @Data
 @Entity
+@Table(name = "posts")
 public class Post {
 
     @Id
@@ -29,70 +29,8 @@ public class Post {
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<Like> likes = new ArrayList<>();
+    private List<Like> likes;
 
-    @OneToMany
-    private List<Reply> replies = new ArrayList<>();
-
-
-    public Post() {}
-    public Post(UUID postId, String content, LocalDateTime postDate, User user) {
-        this.postId = postId;
-        this.content = content;
-        this.postDate = postDate;
-        this.user = user;
-//        likes = new ArrayList<>();
-//        replies = new ArrayList<>();
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public LocalDateTime getDate() {
-        return postDate;
-    }
-
-    public void setPostDate(LocalDateTime postDate) {
-        this.postDate = postDate;
-    }
-
-    public UUID getId() {
-        return postId;
-    }
-
-    public void setId(UUID postId) {
-        this.postId = postId;
-    }
-
-    public List<Like> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<Like> likes) {
-        this.likes = likes;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public List<Reply> getReplies() {
-        return replies;
-    }
-
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + postId +
-                "content='" + content + '\'' +
-                ", date=" + postDate +
-                ", user=" + user +
-                ", likes=" + likes +
-                '}';
-    }
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Reply> replies;
 }

@@ -1,5 +1,7 @@
 package com.ligaaclabs.twitter.model.dto;
 
+import java.util.UUID;
+
 public class LikeResponseDTO {
     private String username;
 

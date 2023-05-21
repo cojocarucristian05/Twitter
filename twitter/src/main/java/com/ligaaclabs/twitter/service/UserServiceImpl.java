@@ -8,6 +8,8 @@ import com.ligaaclabs.twitter.model.entities.User;
 import com.ligaaclabs.twitter.repository.PostRepository;
 import com.ligaaclabs.twitter.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -39,7 +41,6 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.badRequest().body("User already exists!");
         }
         User user = userMapper.userRegisterDTOToUser(userRegisterDTO);
-        user.setUserId(UUID.randomUUID());
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully!");
     }
@@ -50,6 +51,12 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(userMapper::userToUserDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<UserDTO> search(String query, Pageable pageable) {
+        return userRepository.findUsersByUsernameOrLastnameOrFirstname(query, query, query, pageable)
+                .map(userMapper::userToUserDTO);
     }
 
     @Override

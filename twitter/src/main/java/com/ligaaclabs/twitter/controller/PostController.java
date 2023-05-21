@@ -3,6 +3,7 @@ package com.ligaaclabs.twitter.controller;
 import com.ligaaclabs.twitter.model.dto.LikeDTO;
 import com.ligaaclabs.twitter.model.dto.PostDTO;
 import com.ligaaclabs.twitter.model.dto.PostResponseDTO;
+import com.ligaaclabs.twitter.model.dto.ReplyDTO;
 import com.ligaaclabs.twitter.service.PostService;
 import com.ligaaclabs.twitter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +33,13 @@ public class PostController {
         return postService.addPost(userId, content);
     }
 
-    @GetMapping("/{username}/posts")
-    public List<PostResponseDTO> getOwnPosts(@PathVariable String username, @RequestParam(required = false) LocalDateTime timestamp) {
-        return postService.getOwnPostsByTimestamp(username, timestamp);
+    @GetMapping("/{userId}/posts")
+    public List<PostResponseDTO> getOwnPosts(@PathVariable UUID userId, @RequestParam(required = false) LocalDateTime timestamp) {
+        return postService.getOwnPostsByTimestamp(userId, timestamp);
     }
 
     @GetMapping("/{userId}/feed")
-    public List<PostDTO> getFeed(@PathVariable UUID userId) {
+    public List<PostResponseDTO> getFeed(@PathVariable UUID userId) {
         return postService.getFeed(userId);
     }
 
@@ -49,5 +50,10 @@ public class PostController {
     @GetMapping
     public List<PostResponseDTO> getAllPosts() {
         return postService.getAllPosts();
+    }
+
+    @PostMapping("/reply")
+    public ResponseEntity<?> replyPost(@RequestBody ReplyDTO replyDTO) {
+        return postService.addReply(replyDTO);
     }
 }

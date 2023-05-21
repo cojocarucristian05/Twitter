@@ -20,6 +20,7 @@ public interface PostMapper {
     @Mapping(target = "postId", source = "postId")
     @Mapping(target = "content", source = "content")
     @Mapping(target = "postDate", source = "postDate")
-    @Mapping(target = "likesResponseDTO", source = "likes")
+    @Mapping(target = "likeResponseDTOS", source = "likes")
+    @Mapping(target = "replyResponseDTO", source = "replies")
     PostResponseDTO postToPostResponseDTO(Post post);
 }
