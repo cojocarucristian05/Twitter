@@ -83,6 +83,7 @@ public class PostServiceImpl implements PostService {
         }
 
         List<Post> posts = postRepository.findPostsByUser(userRepository.findById(userId).get());
+        //System.out.println(posts);
         if(Objects.isNull(timestamps)) {
             return posts
                     .stream()
@@ -126,7 +127,6 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(likeDTO.getPostId()).get();
         User user = userRepository.findById(likeDTO.getUserId()).get();
         Like like = new Like();
-        like.setId(UUID.randomUUID());
         like.setPost(post);
         like.setUser(user);
         post.getLikes().add(like);
