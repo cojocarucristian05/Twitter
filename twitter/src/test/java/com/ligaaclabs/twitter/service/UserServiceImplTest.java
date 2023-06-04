@@ -84,7 +84,6 @@ class UserServiceImplTest {
                                                                "lastname",
                                                                   "email",
                                                                "pass");
-        userRegisterDTO.setUsername("john");
         User user = new User();
 
         when(userRepository.findUserByUsername(userRegisterDTO.getUsername())).thenReturn(Optional.empty());
