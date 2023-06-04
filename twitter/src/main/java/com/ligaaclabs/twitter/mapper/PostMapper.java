@@ -32,6 +32,7 @@ public interface PostMapper {
     default ReplyResponseDTO toReplyMapper(Reply reply) {
         return REPLY_MAPPER.replyToReplyDTOResponse(reply);
     }
+
     @Mapping(target = "postId", source = "postId")
     @Mapping(target = "content", source = "content")
     @Mapping(target = "postDate", source = "postDate")

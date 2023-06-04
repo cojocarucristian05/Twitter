@@ -9,14 +9,13 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface ReplyMapper {
-    ReplyMapper INSTANCE =  Mappers.getMapper(ReplyMapper.class);
+
     @Mapping(target = "content", source = "content")
-//    @Mapping(target = "isPublic", source = "isPublic")
     @Mapping(target = "user.userId", source = "userId")
     @Mapping(target = "parentPost.postId", source = "postId")
-    public Reply replayDTOToReplay(ReplyDTO replyDTO);
+    Reply replyDTOToReply(ReplyDTO replyDTO);
 
     @Mapping(target = "content", source = "content")
     @Mapping(target = "username", source = "user.username")
-    public ReplyResponseDTO replyToReplyDTOResponse(Reply reply);
+    ReplyResponseDTO replyToReplyDTOResponse(Reply reply);
 }

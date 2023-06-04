@@ -61,11 +61,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public ResponseEntity<?> addPost(UUID userId, String content) {
-        if(userRepository.findById(userId).isEmpty()) {
-            return ResponseEntity.badRequest().body("User not found!");
-        }
-
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found!"));
         Post post = new Post();
         post.setPostDate(LocalDateTime.now());
         post.setContent(content);
@@ -78,12 +74,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostResponseDTO> getOwnPostsByTimestamp(UUID userId, LocalDateTime timestamps) {
-        if(userRepository.findById(userId).isEmpty()) {
-            throw new UserNotFoundException("User not found!");
-        }
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found!"));
 
-        List<Post> posts = postRepository.findPostsByUser(userRepository.findById(userId).get());
-        //System.out.println(posts);
+        List<Post> posts = postRepository.findPostsByUser(user);
         if(Objects.isNull(timestamps)) {
             return posts
                     .stream()
@@ -116,16 +109,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public ResponseEntity<?> likePost(LikeDTO likeDTO) {
-        if(postRepository.findById(likeDTO.getPostId()).isEmpty()) {
-            return ResponseEntity.badRequest().body("Post not found!");
-        }
-
-        if(userRepository.findById(likeDTO.getUserId()).isEmpty()) {
-            return ResponseEntity.badRequest().body("User not found!");
-        }
-
-        Post post = postRepository.findById(likeDTO.getPostId()).get();
-        User user = userRepository.findById(likeDTO.getUserId()).get();
+        Post post = postRepository.findById(likeDTO.getPostId()).orElseThrow(() -> new PostNotFoundException("Post not found!"));
+        User user = userRepository.findById(likeDTO.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found!"));
         Like like = new Like();
         like.setPost(post);
         like.setUser(user);
@@ -137,22 +122,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public ResponseEntity<?> addReply(ReplyDTO replyDTO) {
-        if(userRepository.findById(replyDTO.getUserId()).isEmpty()) {
-            throw new UserNotFoundException("User not found!");
-        }
-        if(postRepository.findById(replyDTO.getPostId()).isEmpty()) {
-            throw new PostNotFoundException("Post not found!");
-        }
-        User user = userRepository.findById(replyDTO.getUserId()).get();
-        Post post = postRepository.findById(replyDTO.getPostId()).get();
-        Reply reply = new Reply();
-        reply.setUser(user);
-        reply.setParentPost(post);
-        reply.setContent(replyDTO.getContent());
-        reply.setParentReply(reply);
-        reply.setPublic(true);
+        User user = userRepository.findById(replyDTO.getUserId()).orElseThrow(() -> new UserNotFoundException("User not found!"));
+        Post post = postRepository.findById(replyDTO.getPostId()).orElseThrow(() -> new PostNotFoundException("Post not found!"));
+        Reply reply = replyMapper.replyDTOToReply(replyDTO);
         post.getReplies().add(reply);
+        user.getReplies().add(reply);
         replyRepository.save(reply);
+        System.out.println(reply);
         return ResponseEntity.ok("Reply added!");
     }
 

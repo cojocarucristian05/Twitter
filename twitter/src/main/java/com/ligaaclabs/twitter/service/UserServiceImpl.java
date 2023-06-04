@@ -61,31 +61,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> follow(UUID idFollower, UUID idFollowed) {
-        if (userRepository.findById(idFollower).isPresent()
-                && userRepository.findById(idFollowed).isPresent()) {
-            User follower  = userRepository.findById(idFollower).get();
-            User followed  = userRepository.findById(idFollowed).get();
-            if(follower.getFollowing().contains(followed)) {
-                return ResponseEntity.badRequest().body("You already follow this account!");
-            }
-            follower.getFollowing().add(followed);
-            followed.getFollowers().add(follower);
-            return ResponseEntity.ok("Follow succeed!");
+        User follower  = userRepository.findById(idFollower).orElseThrow(() -> new UserNotFoundException("Follower not found!"));
+        User followed  = userRepository.findById(idFollowed).orElseThrow(() -> new UserNotFoundException("Followed not found!"));
+        if(follower.getFollowing().contains(followed)) {
+            return ResponseEntity.badRequest().body("You already follow this account!");
         }
-        return ResponseEntity.badRequest().body("Follow denied!");
+        follower.getFollowing().add(followed);
+        followed.getFollowers().add(follower);
+        return ResponseEntity.ok("Follow succeed!");
     }
 
     @Override
     public ResponseEntity<?> unfollow(UUID idFollower, UUID idFollowed) {
-        if (userRepository.findById(idFollower).isPresent()
-                && userRepository.findById(idFollowed).isPresent()) {
-            User follower  = userRepository.findById(idFollower).get();
-            User followed  = userRepository.findById(idFollowed).get();
-            if(follower.getFollowing().contains(followed)) {
-                follower.getFollowing().remove(followed);
-                followed.getFollowers().remove(follower);
-                return ResponseEntity.ok("Unfollow succeed!");
-            }
+        User follower  = userRepository.findById(idFollower).orElseThrow(() -> new UserNotFoundException("Follower not found!"));
+        User followed  = userRepository.findById(idFollowed).orElseThrow(() -> new UserNotFoundException("Followed not found!"));
+        if(follower.getFollowing().contains(followed)) {
+            follower.getFollowing().remove(followed);
+            followed.getFollowers().remove(follower);
+            return ResponseEntity.ok("Unfollow succeed!");
         }
         return ResponseEntity.badRequest().body("Unfollow denied!");
     }
