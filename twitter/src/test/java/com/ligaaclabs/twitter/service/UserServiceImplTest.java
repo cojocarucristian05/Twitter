@@ -124,67 +124,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test User Search by Query - Returns List of UserDTOs")
-    void search_Query_ReturnsListOfUserDTOs() {
-        // Arrange
-//        String query = "john";
-//        User user1 = new User();
-//        user1.setUsername("john");
-//        User user2 = new User();
-//        user2.setLastname("johnson");
-//        List<User> userList = Arrays.asList(user1, user2);
-//        UserDTO userDTO1 = new UserDTO();
-//        userDTO1.setUsername("john");
-//        UserDTO userDTO2 = new UserDTO();
-//        userDTO2.setLastname("johnson");
-//        List<UserDTO> expectedUserDTOList = Arrays.asList(userDTO1, userDTO2);
-//
-//        when(userRepository.searchByUsernameOrLastnameOrFirstname(query, query, query)).thenReturn(userList);
-//        when(userMapper.userToUserDTO(user1)).thenReturn(userDTO1);
-//        when(userMapper.userToUserDTO(user2)).thenReturn(userDTO2);
-//
-//        // Act
-//        List<UserDTO> result = userService.search(query);
-//
-//        // Assert
-//        assertEquals(expectedUserDTOList, result);
-//        verify(userRepository, times(1)).searchByUsernameOrLastnameOrFirstname(query, query, query);
-//        verify(userMapper, times(1)).userToUserDTO(user1);
-//        verify(userMapper, times(1)).userToUserDTO(user2);
-    }
-
-    @Test
-    @DisplayName("Test User Search by Query with Pageable - Returns Page of UserDTOs")
-    void search_QueryWithPageable_ReturnsPageOfUserDTOs() {
-        // Arrange
-//        String query = "john";
-//        User user1 = new User();
-//        user1.setUsername("john");
-//        User user2 = new User();
-//        user2.setLastname("johnson");
-//        List<User> userList = Arrays.asList(user1, user2);
-//        UserDTO userDTO1 = new UserDTO();
-//        userDTO1.setUsername("john");
-//        UserDTO userDTO2 = new UserDTO();
-//        userDTO2.setLastname("johnson");
-//        List<UserDTO> expectedUserDTOList = Arrays.asList(userDTO1, userDTO2);
-//        Pageable pageable = mock(Pageable.class);
-//        Page<User> userPage = mock(Page.class);
-//
-//        when(userRepository.findUsersByUsernameOrLastnameOrFirstname(query, query, query, pageable)).thenReturn(userPage);
-//        when(userPage.map(userMapper::userToUserDTO)).thenReturn(userPage.map(user -> userDTO1));
-//
-//        // Act
-//        Page<UserDTO> result = userService.search(query, pageable);
-//
-//        // Assert
-//        assertEquals(userPage.map(user -> userDTO1), result);
-//        verify(userRepository, times(1)).findUsersByUsernameOrLastnameOrFirstname(query, query, query, pageable);
-//        verify(userPage, times(1)).map(userMapper::userToUserDTO);
-    }
-
-
-    @Test
     @DisplayName("Test User Follow - Returns OK Response")
     void follow_ValidFollowerAndFollowed_ReturnsOkResponse() {
         // Arrange
@@ -336,26 +275,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test User Unregister - Returns OK Response and deletes User and related Posts")
-    void unregister_ValidUserId_ReturnsOkResponseAndDeletesUserAndPosts() {
-//        // Arrange
-//        UUID userId = UUID.randomUUID();
-//        User user = createUser(userId);
-//
-//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-//
-//        // Act
-//        ResponseEntity<?> response = userService.unregister(userId);
-//
-//        // Assert
-//        assertEquals(ResponseEntity.ok("User deleted!"), response);
-//        verify(postRepository, times(1)).deleteAll(user.getPosts());
-//        verify(userRepository, times(1)).delete(user);
-//        verify(userRepository, times(1)).findById(userId);
-//        verify(userRepository, times(1)).findAll();
-    }
-
-    @Test
     @DisplayName("Test User Unregister - Throws UserNotFoundException if User does not exist")
     void unregister_UserNotFound_ThrowsUserNotFoundException() {
         // Arrange
@@ -368,31 +287,6 @@ class UserServiceImplTest {
         verify(userRepository, times(1)).findById(userId);
         verify(userRepository, never()).delete(any(User.class));
         verify(postRepository, never()).deleteAll(anyList());
-    }
-
-    @Test
-    @DisplayName("Test Get All Users - Returns List of UserDTOs")
-    void getAllUsers_ReturnsListOfUserDTOs() {
-        // Arrange
-//        User user1 = new User();
-//        User user2 = new User();
-//        List<User> userList = Arrays.asList(user1, user2);
-//        UserDTO userDTO1 = new UserDTO();
-//        UserDTO userDTO2 = new UserDTO();
-//        List<UserDTO> expectedUserDTOList = Arrays.asList(userDTO1, userDTO2);
-//
-//        when(userRepository.findAll()).thenReturn(userList);
-//        when(userMapper.userToUserDTO(user1)).thenReturn(userDTO1);
-//        when(userMapper.userToUserDTO(user2)).thenReturn(userDTO2);
-//
-//        // Act
-//        List<UserDTO> result = userService.getAllUsers();
-//
-//        // Assert
-//        assertEquals(expectedUserDTOList, result);
-//        verify(userRepository, times(1)).findAll();
-//        verify(userMapper, times(1)).userToUserDTO(user1);
-//        verify(userMapper, times(1)).userToUserDTO(user2);
     }
 
     private User createUser(UUID userId) {

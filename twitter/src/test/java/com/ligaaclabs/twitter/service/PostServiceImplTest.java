@@ -164,34 +164,6 @@ class PostServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test Get Feed with Valid User - Returns PostResponseDTO List")
-    void testGetFeed_WithValidUser_ReturnsPostResponseDTOList() {
-//        UUID userId = UUID.randomUUID();
-//        User user = createUser(userId);
-//        List<User> following = Arrays.asList(createUser(UUID.randomUUID()), createUser(UUID.randomUUID()));
-//        List<Post> posts = Arrays.asList(new Post(), new Post());
-//
-//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-//        when(user.getFollowing()).thenReturn(following);
-//        when(postRepository.findPostsByUser(any(User.class))).thenReturn(posts);
-//        when(postMapper.postToPostResponseDTO(any(Post.class))).thenReturn(new PostResponseDTO(
-//                UUID.randomUUID(),
-//                "Sample post",
-//                LocalDateTime.now(),
-//                new ArrayList<>(),
-//                new ArrayList<>()
-//        ));
-//
-//        List<PostResponseDTO> result = postService.getFeed(userId);
-//
-//        assertEquals(posts.size() * following.size(), result.size());
-//        verify(userRepository, times(1)).findById(userId);
-//        verify(user, times(1)).getFollowing();
-//        verify(postRepository, times(following.size())).findPostsByUser(any(User.class));
-//        verify(postMapper, times(posts.size() * following.size())).postToPostResponseDTO(any(Post.class));
-    }
-
-    @Test
     @DisplayName("Test getFeed with invalid user - throws UserNotFoundException")
     void testGetFeed_WithInvalidUser_ThrowsUserNotFoundException() {
         UUID userId = UUID.randomUUID();
@@ -201,31 +173,6 @@ class PostServiceImplTest {
         assertThrows(UserNotFoundException.class, () -> postService.getFeed(userId));
 
         verify(userRepository, times(1)).findById(userId);
-    }
-
-    @Test
-    @DisplayName("Test Add Reply with Valid User and Post - Returns OK Response")
-    void addReply_ValidUserAndPost_ReturnsOkResponse() {
-        // Arrange
-//        UUID userId = UUID.randomUUID();
-//        UUID postId = UUID.randomUUID();
-//        User user = createUser(userId);
-//        Post post = createPost(postId);
-//        ReplyDTO replyDTO = new ReplyDTO("Nice post", true, userId, postId);
-//        Reply reply = createReply();
-//
-//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-//        when(postRepository.findById(postId)).thenReturn(Optional.of(post));
-//        when(replyMapper.replyDTOToReply(replyDTO)).thenReturn(reply);
-//
-//        // Act
-//        ResponseEntity<?> response = postService.addReply(replyDTO);
-//
-//        // Assert
-//        assertEquals(ResponseEntity.ok("Reply added!"), response);
-//        assertTrue(post.getReplies().contains(reply));
-//        assertTrue(user.getReplies().contains(reply));
-//        verify(replyRepository, times(1)).save(reply);
     }
 
     @Test
@@ -242,23 +189,6 @@ class PostServiceImplTest {
         assertThrows(UserNotFoundException.class, () -> postService.addReply(replyDTO));
         verify(postRepository, never()).findById(any(UUID.class));
         verify(replyRepository, never()).save(any(Reply.class));
-    }
-
-    @Test
-    @DisplayName("Test Add Reply with Invalid Post - Throws PostNotFoundException")
-    void addReply_InvalidPost_ThrowsPostNotFoundException() {
-//        // Arrange
-//        UUID userId = UUID.randomUUID();
-//        UUID postId = UUID.randomUUID();
-//        User user = createUser(userId);
-//        ReplyDTO replyDTO = new ReplyDTO("Nice post!", true, userId, postId);
-//
-//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-//        when(postRepository.findById(postId)).thenReturn(Optional.empty());
-//
-//        // Assert
-//        assertThrows(PostNotFoundException.class, () -> postService.addReply(replyDTO));
-//        verify(replyRepository, never()).save(any(Reply.class));
     }
 
     @Test

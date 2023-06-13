@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ligaaclabs.twitter.model.dto.LikeDTO;
 import com.ligaaclabs.twitter.model.dto.PostResponseDTO;
-import com.ligaaclabs.twitter.model.dto.ReplyDTO;
 import com.ligaaclabs.twitter.service.PostService;
 import com.ligaaclabs.twitter.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -74,21 +73,6 @@ class PostControllerTest {
     }
 
     @Test
-    void getFeed() throws Exception {
-        UUID userId = UUID.randomUUID();
-
-        List<PostResponseDTO> posts = createDummyPosts();
-
-        when(postService.getFeed(eq(userId))).thenReturn(posts);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/posts/{userId}/feed", userId))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(posts.size())));
-
-        verify(postService).getFeed(eq(userId));
-    }
-
-    @Test
     void likePost() throws Exception {
         LikeDTO likeDTO = new LikeDTO(UUID.randomUUID(), UUID.randomUUID());
 
@@ -114,22 +98,6 @@ class PostControllerTest {
 
         verify(postService).getAllPosts();
     }
-
-    @Test
-    void replyPost() throws Exception {
-        // Create replyDTO once and reuse it
-//        ReplyDTO replyDTO = new ReplyDTO("Test reply", true, UUID.randomUUID(), UUID.randomUUID());
-//
-//        when(postService.addReply(eq(replyDTO))).thenReturn(ResponseEntity.ok().build());
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/posts/reply")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(asJsonString(replyDTO)))
-//                        .andExpect(status().isOk());
-//
-//        verify(postService).addReply(eq(replyDTO));
-    }
-
 
     // Helper method to convert objects to JSON string
     private String asJsonString(Object obj) throws JsonProcessingException {

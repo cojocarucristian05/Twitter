@@ -1,7 +1,5 @@
 package com.ligaaclabs.twitter.model.dto;
 
-import com.ligaaclabs.twitter.model.entities.User;
-
 import java.util.UUID;
 
 public class ReplyDTO {

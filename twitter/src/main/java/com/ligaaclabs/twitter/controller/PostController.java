@@ -1,7 +1,7 @@
 package com.ligaaclabs.twitter.controller;
 
 import com.ligaaclabs.twitter.model.dto.LikeDTO;
-import com.ligaaclabs.twitter.model.dto.PostDTO;
+import com.ligaaclabs.twitter.model.dto.PostDTOFeedResponse;
 import com.ligaaclabs.twitter.model.dto.PostResponseDTO;
 import com.ligaaclabs.twitter.model.dto.ReplyDTO;
 import com.ligaaclabs.twitter.service.PostService;
@@ -39,7 +39,7 @@ public class PostController {
     }
 
     @GetMapping("/{userId}/feed")
-    public List<PostResponseDTO> getFeed(@PathVariable UUID userId) {
+    public List<PostDTOFeedResponse> getFeed(@PathVariable UUID userId) {
         return postService.getFeed(userId);
     }
 

@@ -1,9 +1,6 @@
 package com.ligaaclabs.twitter.mapper;
 
-import com.ligaaclabs.twitter.model.dto.LikeResponseDTO;
-import com.ligaaclabs.twitter.model.dto.PostDTO;
-import com.ligaaclabs.twitter.model.dto.PostResponseDTO;
-import com.ligaaclabs.twitter.model.dto.ReplyResponseDTO;
+import com.ligaaclabs.twitter.model.dto.*;
 import com.ligaaclabs.twitter.model.entities.Like;
 import com.ligaaclabs.twitter.model.entities.Post;
 import com.ligaaclabs.twitter.model.entities.Reply;
@@ -39,4 +36,12 @@ public interface PostMapper {
     @Mapping(target = "likeResponseDTOS", source = "likes", qualifiedByName = "toLikeMapper")
     @Mapping(target = "replyResponseDTO", source = "replies", qualifiedByName = "toReplyMapper")
     PostResponseDTO postToPostResponseDTO(Post post);
+
+    @Mapping(target = "postId", source = "postId")
+    @Mapping(target = "content", source = "content")
+    @Mapping(target = "postDate", source = "postDate")
+    @Mapping(target = "likeResponseDTOS", source = "likes", qualifiedByName = "toLikeMapper")
+    @Mapping(target = "replyResponseDTO", source = "replies", qualifiedByName = "toReplyMapper")
+    @Mapping(target = "username", source = "post.user.username")
+    PostDTOFeedResponse postToPostDTOFeedResponse(Post post);
 }

@@ -2,9 +2,6 @@ package com.ligaaclabs.twitter.controller;
 
 import com.ligaaclabs.twitter.model.dto.UserDTO;
 import com.ligaaclabs.twitter.model.dto.UserRegisterDTO;
-import com.ligaaclabs.twitter.service.LikeService;
-import com.ligaaclabs.twitter.service.PostService;
-import com.ligaaclabs.twitter.service.ReplyService;
 import com.ligaaclabs.twitter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -56,5 +53,10 @@ public class UserController {
     @DeleteMapping("/unregister/{userId}")
     public ResponseEntity<?> unregister(@PathVariable UUID userId) {
         return userService.unregister(userId);
+    }
+
+    @GetMapping("/followers/{userId}")
+    public List<UserDTO> getFollowers(@PathVariable UUID userId) {
+        return userService.getFollowers(userId);
     }
 }

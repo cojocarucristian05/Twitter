@@ -85,10 +85,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?> unregister(UUID userId) {
-        if (userRepository.findById(userId).isEmpty()) {
-            throw new UserNotFoundException("User not found!");
-        }
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found!"));
         postRepository.deleteAll(user.getPosts());
         userRepository.delete(user);
         for (User follower : user.getFollowers()) {
@@ -98,6 +95,15 @@ public class UserServiceImpl implements UserService {
             followed.getFollowers().remove(user);
         }
         return ResponseEntity.ok("User deleted!");
+    }
+
+    @Override
+    public List<UserDTO> getFollowers(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found!"));
+        return user.getFollowers()
+                .stream()
+                .map(userMapper::userToUserDTO)
+                .collect(Collectors.toList());
     }
 
     @Override

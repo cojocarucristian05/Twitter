@@ -5,7 +5,6 @@ import com.ligaaclabs.twitter.model.dto.ReplyResponseDTO;
 import com.ligaaclabs.twitter.model.entities.Reply;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface ReplyMapper {

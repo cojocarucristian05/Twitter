@@ -5,10 +5,7 @@ import com.ligaaclabs.twitter.advice.exception.UserNotFoundException;
 import com.ligaaclabs.twitter.mapper.LikeMapper;
 import com.ligaaclabs.twitter.mapper.PostMapper;
 import com.ligaaclabs.twitter.mapper.ReplyMapper;
-import com.ligaaclabs.twitter.model.dto.LikeDTO;
-import com.ligaaclabs.twitter.model.dto.PostDTO;
-import com.ligaaclabs.twitter.model.dto.PostResponseDTO;
-import com.ligaaclabs.twitter.model.dto.ReplyDTO;
+import com.ligaaclabs.twitter.model.dto.*;
 import com.ligaaclabs.twitter.model.entities.Like;
 import com.ligaaclabs.twitter.model.entities.Post;
 import com.ligaaclabs.twitter.model.entities.Reply;
@@ -92,16 +89,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostResponseDTO> getFeed(UUID userId) {
-        if(userRepository.findById(userId).isEmpty()) {
-            throw new UserNotFoundException("User not found!");
-        }
-        User user = userRepository.findById(userId).get();
-        List<PostResponseDTO> feed = new ArrayList<>();
+    public List<PostDTOFeedResponse> getFeed(UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User not found!"));
+        List<PostDTOFeedResponse> feed = new ArrayList<>();
         for(User followed : user.getFollowing()) {
             feed.addAll(postRepository.findPostsByUser(followed)
                     .stream()
-                    .map(postMapper::postToPostResponseDTO).toList()
+                    .map(postMapper::postToPostDTOFeedResponse).toList()
             );
         }
         return feed;
