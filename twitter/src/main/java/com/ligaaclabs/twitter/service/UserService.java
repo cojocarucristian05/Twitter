@@ -22,6 +22,7 @@ public interface UserService {
     Page<UserDTO> search(String query, Pageable pageable);
     ResponseEntity<?> follow(UUID idFollower, UUID idFollowed);
     ResponseEntity<?> unfollow(UUID idFollower, UUID idFollowed);
-
     ResponseEntity<?> unregister(UUID userId);
+
+    List<UserDTO> getFollowers(UUID userId);
 }

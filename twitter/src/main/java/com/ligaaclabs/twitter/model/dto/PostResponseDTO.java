@@ -1,9 +1,5 @@
 package com.ligaaclabs.twitter.model.dto;
 
-
-import com.ligaaclabs.twitter.model.entities.Like;
-import com.ligaaclabs.twitter.model.entities.Reply;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;

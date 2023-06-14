@@ -24,10 +24,10 @@ public class Reply {
     @JoinColumn(name = "post_id", nullable = false)
     private Post parentPost;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_reply")
-    private Reply parentReply;
-
-    @Column(name = "reply_public", nullable = false)
-    private boolean isPublic;
+//    @ManyToOne
+//    @JoinColumn(name = "parent_reply")
+//    private Reply parentReply;
+//
+//    @Column(name = "reply_public", nullable = false)
+//    private boolean isPublic;
 }

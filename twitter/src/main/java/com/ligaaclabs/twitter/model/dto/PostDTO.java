@@ -2,7 +2,6 @@ package com.ligaaclabs.twitter.model.dto;
 
 import lombok.Data;
 
-import java.rmi.server.UID;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
